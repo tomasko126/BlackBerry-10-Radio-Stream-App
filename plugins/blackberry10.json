@@ -1,0 +1,26 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {
+            "www/config.xml": {
+                "parents": {
+                    "/widget": [
+                        {
+                            "xml": "<feature name=\"com.blackberry.ui.contextmenu\" value=\"com.blackberry.ui.contextmenu\" />",
+                            "count": 1
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "installed_plugins": {
+        "com.blackberry.ui.contextmenu": {
+            "PACKAGE_NAME": "slovenskeradia"
+        }
+    },
+    "dependent_plugins": {}
+}

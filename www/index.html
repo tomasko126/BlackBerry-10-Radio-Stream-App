@@ -1,0 +1,120 @@
+<html>
+    <head>
+        <title></title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+        <meta charset="utf-8">
+        <style type="text/css">
+            #playcontrols {
+                text-align: center;
+                margin-top: 50px;
+            }
+            #playcontrols #activityindicator, #playcontrols #stopbutton {
+                display: none;
+            }
+            h2 {
+                text-align: center;
+                font-weight: 100;
+            }
+            .radio {
+                width:100%;
+                height: 80px;
+                border-bottom: 1px solid grey;
+            }
+            .name {
+                display: inline;
+                padding: 26px 18px;
+                position: absolute;
+                font-family: sans-serif;
+            }
+            .description {
+                padding: 45px 18px;
+                position: absolute;
+                font-family: serif;
+                font-weight: 400;
+                display: inline;
+                font-size: smaller;
+            }
+            .img {
+                width: 40px;
+                margin: 12px 0px 12px 10px;
+            }
+            img {
+                width: 80px;
+            }
+            .buttons {
+                display: inline;
+                float: right;
+                margin-top: 10px;
+                margin-right: 2px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="index">
+            <div id="radios">
+                <div id="expres" class="radio">
+                    <img src="images/expres.png" />
+                    <div class="name">Rádio EXPRES</div>
+                    <div class="description">Baví nás baviť vás</div>
+                    <div class="buttons">
+                        <a href="#" class="playbutton" onclick="html5audio.play('expres');return false;">
+                            <img class="img" src="images/playbutton.png">
+                        </a>
+                        <a href="#" class="activityindicator" onclick="html5audio.stop('expres');return false;">
+                            <img class="img" src="images/activityindicator.gif">
+                        </a>
+                        <a href="#" class="stopbutton" onclick="html5audio.stop('expres');return false;">
+                            <img class="img" src="images/stopbutton.png">
+                        </a>
+                    </div>
+                </div>
+
+                <div id="funradio" class="radio">
+                    <img src="images/funradio.png" />
+                    <div class="name">FUN Rádio</div>
+                    <div class="description">European Hit Radio</div>
+                    <div class="buttons">
+                        <a href="#" class="playbutton" onclick="html5audio.play('funradio');return false;">
+                            <img class="img" src="images/playbutton.png">
+                        </a>
+                        <a href="#" class="activityindicator" onclick="html5audio.stop('funradio');return false;">
+                            <img class="img" src="images/activityindicator.gif">
+                        </a>
+                        <a href="#" class="stopbutton" onclick="html5audio.stop('funradio');return false;">
+                            <img class="img" src="images/stopbutton.png">
+                        </a>
+                    </div>
+                </div>
+
+                <div id="sro" class="radio">
+                    <img src="images/slovensko.png" />
+                    <div class="name">Rádio Slovensko</div>
+                    <div class="description">Najpočúvanejší okruh RTVS</div>
+                    <div class="buttons">
+                        <a href="#" class="playbutton" onclick="html5audio.play('sro');return false;">
+                            <img class="img" src="images/playbutton.png">
+                        </a>
+                        <a href="#" class="activityindicator" onclick="html5audio.stop('sro');return false;">
+                            <img class="img" src="images/activityindicator.gif">
+                        </a>
+                        <a href="#" class="stopbutton" onclick="html5audio.stop('sro');return false;">
+                            <img class="img" src="images/stopbutton.png">
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+            <br>
+            <br>
+            <div id="playingdiv">Actually playing:
+                <span id="playing">Expres</span>
+                <div id="volume">Volume:
+                    <input type="range" min="0" max="100" value="100" id="fader" step="1" style="position:absolute;">
+                </div>
+            </div>
+            <div id="indicator" data-bb-type="activity-indicator" data-bb-size="large"></div>
+        </div>
+        <script type="text/javascript" src="scripts/jquery.js"></script>
+        <script type="text/javascript" src="scripts/html5audio.js"></script>
+    </body>
+</html>
