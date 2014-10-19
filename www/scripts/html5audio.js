@@ -16,28 +16,6 @@ function onConfirmRetry(button) {
     }
 }
 
-// Update volume
-$("#fader").on("input change", function() {
-    outputUpdate(this.value);
-});
-
-function outputUpdate(vol) {
-    switch (vol) {
-        case "100": vol = "1"; break;
-        case "9": vol = "0.09"; break;
-        case "8": vol = "0.08"; break;
-        case "7": vol = "0.07"; break;
-        case "6": vol = "0.06"; break;
-        case "5": vol = "0.05"; break;
-        case "4": vol = "0.04"; break;
-        case "3": vol = "0.03"; break;
-        case "2": vol = "0.02"; break;
-        case "1": vol = "0.01"; break;
-        default: vol = "0." + vol.toString(); break;
-    }
-    myaudio.volume = vol;
-}
-
 var myaudioURL = "http://85.248.7.162:8000/96.mp3";
 var myaudio = new Audio(myaudioURL);
 
