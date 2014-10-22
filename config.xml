@@ -4,6 +4,7 @@
     <author>Tomáš Taro</author>
     <description>Streamuj slovenské rádiá online</description>
     <content src="index.html" />
+    <access uri="http://tomastaro.sk" subdomains="true" />
     <preference name="AutoHideSplashScreen" value="true" />
     <preference name="ChildBrowser" value="enable" />
     <preference name="DiskCache" value="disable" />
