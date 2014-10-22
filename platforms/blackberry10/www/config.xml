@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="slovenskeradia" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:rim="http://www.blackberry.com/ns/widgets">
-    <feature name="com.blackberry.ui.contextmenu" value="com.blackberry.ui.contextmenu" />
     <name>Online SK rádiá</name>
     <author>Tomáš Taro</author>
     <description>Streamuj slovenské rádiá online</description>

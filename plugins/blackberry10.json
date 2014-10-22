@@ -7,20 +7,11 @@
         "files": {
             "www/config.xml": {
                 "parents": {
-                    "/widget": [
-                        {
-                            "xml": "<feature name=\"com.blackberry.ui.contextmenu\" value=\"com.blackberry.ui.contextmenu\" />",
-                            "count": 1
-                        }
-                    ]
+                    "/widget": []
                 }
             }
         }
     },
-    "installed_plugins": {
-        "com.blackberry.ui.contextmenu": {
-            "PACKAGE_NAME": "slovenskeradia"
-        }
-    },
+    "installed_plugins": {},
     "dependent_plugins": {}
 }

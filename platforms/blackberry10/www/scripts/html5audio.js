@@ -1,7 +1,7 @@
+// Buttons
 var playButton = document.getElementsByClassName('playbutton');
 var stopButton = document.getElementsByClassName('stopbutton');
 var activityIndicator = document.getElementsByClassName('activityindicator');
-var textPosition = document.getElementById('textposition');
 
 // Hide yet unused stuff
 for (var i=0; i<stopButton.length; i++)
@@ -10,64 +10,44 @@ for (var i=0; i<stopButton.length; i++)
 for (var i=0; i<activityIndicator.length; i++)
     activityIndicator[i].style.display = "none";
 
-function onConfirmRetry(button) {
-    if (button == 1) {
-        html5audio.play();
-    }
-}
+// Init variables
+var getMetadata = null;        // Function - setInterval() fn, which calls get_song(radio) for updating name of song
+var isPlaying = false;          // Bool - If stream is playing, it's given value is true
+var readyStateInterval = null;  // Function - setInterval() fn, see line 63 for more info
+var stream = null;              // Object - HTML5 Audio object
+var streamURL = null;           // String - URL of chosen stream
 
-// Update volume
-$("#fader").on("input change", function() {
-    outputUpdate(this.value);
-});
-
-function outputUpdate(vol) {
-    switch (vol) {
-        case "100": vol = "1"; break;
-        case "9": vol = "0.09"; break;
-        case "8": vol = "0.08"; break;
-        case "7": vol = "0.07"; break;
-        case "6": vol = "0.06"; break;
-        case "5": vol = "0.05"; break;
-        case "4": vol = "0.04"; break;
-        case "3": vol = "0.03"; break;
-        case "2": vol = "0.02"; break;
-        case "1": vol = "0.01"; break;
-        default: vol = "0." + vol.toString(); break;
-    }
-    myaudio.volume = vol;
-}
-
-var myaudioURL = "http://85.248.7.162:8000/96.mp3";
-var myaudio = new Audio(myaudioURL);
-
-var isPlaying = false;
-var readyStateInterval = null;
-
+// HTML5audio object
 var html5audio = {
     play: function(radio)
     {
-        if (isPlaying)
-            html5audio.resetIcons();
+        if (isPlaying) {
+            html5audio.resetIcons(radio);
+            clearInterval(getMetadata);
+        }
 
         switch (radio) {
-            case "expres": myaudioURL = "http://85.248.7.162:8000/96.mp3";
+            case "expres":
+                streamURL = "http://85.248.7.162:8000/96.mp3";
                 break;
-            case "sro": myaudioURL = "http://85.248.7.162:8000/96.mp3";
+            case "sro":
+                streamURL = "http://live.slovakradio.sk:8000/Slovensko_128.mp3";
                 break;
-            case "funradio": myaudioURL = "http://stream.funradio.sk:8000/fun128.mp3";
+            case "funradio":
+                streamURL = "http://stream.funradio.sk:8000/fun128.mp3";
                 break;
         }
-        // Init radio station
-        myaudio = new Audio(myaudioURL);
+        // Init chosen radio station
+        stream = new Audio(streamURL);
 
-        // Change played radio station
-        $("#playing").text(radio);
+        getMetadata = setInterval(function() {
+            get_song(radio);
+        }, 5000);
 
         isPlaying = true;
-        myaudio.play();
+        stream.play();
 
-        var get;
+        var get = null;
         if (radio === "expres") {
             get = $(playButton[0]).parent();
         } else if (radio === "funradio") {
@@ -82,41 +62,45 @@ var html5audio = {
 
 
         readyStateInterval = setInterval(function(){
-            if (myaudio.readyState <= 2) {
+            if (stream.readyState <= 2) {
                 play.style.display = 'none';
                 load.style.display = 'block';
             }
-        },1000);
-        myaudio.addEventListener("waiting", function() {
-            //console.log('myaudio WAITING');
+        }, 1000);
+
+        stream.addEventListener("waiting", function() {
             isPlaying = false;
             play.style.display = 'none';
             stop.style.display = 'none';
             load.style.display = 'block';
         }, false);
-        myaudio.addEventListener("playing", function() {
+
+        stream.addEventListener("playing", function() {
             isPlaying = true;
             play.style.display = 'none';
             load.style.display = 'none';
             stop.style.display = 'block';
         }, false);
-        myaudio.addEventListener("ended", function() {
+
+        stream.addEventListener("ended", function() {
             html5audio.stop();
             if (window.confirm('Streaming failed. Possibly due to a network error. Retry?')) {
-                onConfirmRetry();
+                html5audio.play(radio);
             }
         }, false);
     },
+
     pause: function() {
         isPlaying = false;
         clearInterval(readyStateInterval);
-        myaudio.pause();
+        stream.pause();
         stopButton.style.display = 'none';
         activityIndicator.style.display = 'none';
         playButton.style.display = 'block';
     },
+
     resetIcons: function(radio) {
-        myaudio.pause();
+        stream.pause();
 
         for (var i=0; i<stopButton.length; i++)
             $(stopButton[i]).css("display","none");
@@ -127,10 +111,11 @@ var html5audio = {
         for (var i=0; i<playButton.length; i++)
             $(playButton[i]).css("display","block");
 
-        html5audio.stop();
+        html5audio.stop(radio);
     },
+
     stop: function(radio) {
-        var get;
+        var get = null;
         if (radio === "expres") {
             get = $(playButton[0]).parent();
         } else if (radio === "funradio") {
@@ -151,8 +136,33 @@ var html5audio = {
 
         isPlaying = false;
         clearInterval(readyStateInterval);
-        if (myaudio)
-            myaudio.pause();
-        myaudio = null;
+        clearInterval(getMetadata);
+        if (stream)
+            stream.pause();
+        stream = null;
     }
 };
+
+// Parse stream track info
+var get_song = function(station) {
+    function reqListener () {
+        if (station !== "sro")
+            $("#playingsong").html(this.responseText).text();
+        else {
+            var parser = new DOMParser();
+            var html = parser.parseFromString(this.responseText, "text/html");
+            html.querySelector(".ro-slovensko > .playRadio > .overflow > strong").remove();
+            $("#playingsong").text(function() {
+                var text = html.querySelector(".ro-slovensko > .playRadio > .overflow").textContent;
+                return text.replace(/-/,"").replace(" ","");
+            });
+        }
+    }
+
+    var url = "http://tomastaro.sk/parser" + station + ".php";
+
+    var xhr = new XMLHttpRequest();
+    xhr.onload = reqListener;
+    xhr.open("get", url, true);
+    xhr.send();
+}

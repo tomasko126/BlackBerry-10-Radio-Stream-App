@@ -3,51 +3,18 @@
         <title></title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
         <meta charset="utf-8">
-        <style type="text/css">
-            #playcontrols {
-                text-align: center;
-                margin-top: 50px;
-            }
-            #playcontrols #activityindicator, #playcontrols #stopbutton {
-                display: none;
-            }
-            h2 {
-                text-align: center;
-                font-weight: 100;
-            }
-            .radio {
-                width:100%;
-                height: 80px;
-                border-bottom: 1px solid grey;
-            }
-            .name {
-                display: inline;
-                padding: 26px 18px;
-                position: absolute;
-                font-family: sans-serif;
-            }
-            .description {
-                padding: 45px 18px;
-                position: absolute;
-                font-family: serif;
-                font-weight: 400;
-                display: inline;
-                font-size: smaller;
-            }
-            .img {
-                width: 40px;
-                margin: 12px 0px 12px 10px;
-            }
-            img {
-                width: 80px;
-            }
-            .buttons {
-                display: inline;
-                float: right;
-                margin-top: 10px;
-                margin-right: 2px;
-            }
-        </style>
+        <link rel="stylesheet" type="text/css" href="css/bbui.css"></link>
+        <link rel="stylesheet" type="text/css" href="css/index.css"></link>
+        <script type="text/javascript" src="scripts/bbui.js"></script>
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="scripts/jquery.js"></script>
+        <script type="text/javascript">
+        window.addEventListener('load',function() {
+            document.addEventListener('deviceready', function(e) {
+                bb.init();
+            }, false);
+        }, false);
+        </script>
     </head>
     <body>
         <div id="index">
@@ -106,12 +73,10 @@
             </div>
             <br>
             <br>
-            <div id="playingdiv">Actually playing:
-                <span id="playing">Expres</span>
+            <div id="playingsongdiv">Song:
+                <span id="playingsong"></span>
             </div>
-            <div id="indicator" data-bb-type="activity-indicator" data-bb-size="large"></div>
         </div>
-        <script type="text/javascript" src="scripts/jquery.js"></script>
         <script type="text/javascript" src="scripts/html5audio.js"></script>
     </body>
 </html>
