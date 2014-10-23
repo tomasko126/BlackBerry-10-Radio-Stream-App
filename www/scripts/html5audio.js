@@ -149,8 +149,8 @@ var get_song = function(station) {
         if (station !== "sro")
             $("#playingsong").html(this.responseText).text();
         else {
-            var parser = new DOMParser();
-            var html = parser.parseFromString(this.responseText, "text/html");
+            var html = document.implementation.createHTMLDocument('');
+            html.documentElement.innerHTML = this.responseText;
             html.querySelector(".ro-slovensko > .playRadio > .overflow > strong").remove();
             $("#playingsong").text(function() {
                 var text = html.querySelector(".ro-slovensko > .playRadio > .overflow").textContent;
