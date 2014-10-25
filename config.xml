@@ -1,10 +1,12 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.blackberry.slovenskeradia" version="0.2.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:rim="http://www.blackberry.com/ns/widgets">
+<widget id="com.blackberry.slovenskeradia" version="0.3" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:rim="http://www.blackberry.com/ns/widgets">
     <name>Online SK rádiá</name>
     <author>Tomáš Taro</author>
     <description>Streamuj slovenské rádiá online</description>
     <content src="index.html" />
-    <access uri="http://tomastaro.sk" subdomains="true" />
+    <access uri="http://tomastaro.sk" subdomains="false" />
+    <access uri="http://audioscrobbler.com" subdomains="true" />
+    <access uri="http://last.fm" subdomains="true" />
     <preference name="AutoHideSplashScreen" value="true" />
     <preference name="ChildBrowser" value="enable" />
     <preference name="DiskCache" value="disable" />

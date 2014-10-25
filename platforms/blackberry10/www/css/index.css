@@ -1,3 +1,6 @@
+body {
+    margin: 0px;
+}
 #playcontrols {
     text-align: center;
     margin-top: 50px;
@@ -5,39 +8,64 @@
 #playcontrols #activityindicator, #playcontrols #stopbutton {
     display: none;
 }
+#playing {
+    display: inline-block;
+    margin-left: 10px;
+    margin-top: 12px;
+    position: fixed;
+    font-weight: 300;
+}
+#artist {
+    display: block;
+}
+#status {
+    width: 100%;
+    bottom: 0px;
+    position: fixed;
+    background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, rgba(199, 199, 199, 0.25)) );
+    font-family: Helvetica Neue;
+    border-top: 1px solid rgb(185, 179, 179);
+}
 h2 {
     text-align: center;
     font-weight: 100;
 }
 .radio {
     width:100%;
-    height: 80px;
-    border-bottom: 1px solid grey;
+    height: 55px;
+    border-bottom: 1px solid rgb(185, 179, 179);
+    background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, rgba(199, 199, 199, 0.24)) );
 }
 .name {
     display: inline;
-    padding: 26px 18px;
+    padding: 14px 18px;
     position: absolute;
-    font-family: sans-serif;
+    font-family: Helvetica;
+    font-weight: 300;
 }
 .description {
-    padding: 45px 18px;
+    padding: 34px 18px;
     position: absolute;
-    font-family: serif;
+    font-family: Helvetica Neue;
     font-weight: 400;
     display: inline;
-    font-size: smaller;
+    font-size: 10px;
 }
 .img {
-    width: 40px;
-    margin: 12px 0px 12px 10px;
+    width: 30px;
+    margin-top: 13px;
+    margin-right: 4px;
+    border: none;
 }
 img {
-    width: 80px;
+    width: 50px;
+    margin-left: 5px;
+    border: 1px solid rgb(230, 224, 224);
+    border-radius: 3px;
+    margin-top: 1.5px;
 }
 .buttons {
     display: inline;
     float: right;
-    margin-top: 10px;
     margin-right: 2px;
 }
