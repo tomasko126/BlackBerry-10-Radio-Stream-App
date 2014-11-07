@@ -1,14 +1,31 @@
+// TODO: Make a review of the code, simplify it - long-time approach
+//       Add comments to the code
+// Switch to scroll panel? https://github.com/blackberry/bbUI.js/wiki/Scroll-Panel
+
 // Buttons
-var playButton = document.getElementsByClassName('playbutton');
-var stopButton = document.getElementsByClassName('stopbutton');
-var activityIndicator = document.getElementsByClassName('activityindicator');
+var activityIndicator = document.getElementById('activityindicator');
 
-// Hide yet unused stuff
-for (var i=0; i<stopButton.length; i++)
-    stopButton[i].style.display = "none";
+// Set height of radio ID
+setTimeout(function() {
+    //document.getElementById("radios").style.height = document.querySelectorAll(".radio").length * 127;
+}, 2500);
 
-for (var i=0; i<activityIndicator.length; i++)
-    activityIndicator[i].style.display = "none";
+$(".radio").click(function() {
+    html5audio.play(this.id);
+});
+
+// TODO: Create an object for every station
+var expres = {
+    station_name: "Rádio EXPRES",
+    station_description: "Baví nás baviť vás",
+    station_icon: "../images/expres.png",
+    stream: {
+        20: "http://85.248.7.162:8000/20.aac",
+        48: "http://85.248.7.162:8000/48.aac",
+        64: "http://85.248.7.162:8000/64.mp3",
+        96: "http://85.248.7.162:8000/96.mp3"
+    }
+}
 
 // Init variables
 var getMetadata = null;         // Function - setInterval() fn, which calls get_song(radio) for updating name of song
@@ -27,6 +44,7 @@ var html5audio = {
             clearInterval(getMetadata);
         }
 
+        // TODO: Implement switching of quality of stream
         switch (radio) {
             case "expres":
                 streamURL = "http://85.248.7.162:8000/96.mp3";
@@ -42,46 +60,29 @@ var html5audio = {
         stream = new Audio(streamURL);
         station = radio;
 
+        get_song(radio);
+
         getMetadata = setInterval(function() {
             get_song(radio);
-        }, 5000);
+        }, 30000);
 
         isPlaying = true;
         stream.play();
 
-        var get = null;
-        if (radio === "expres") {
-            get = $(playButton[0]).parent();
-        } else if (radio === "funradio") {
-            get = $(playButton[1]).parent();
-        } else if (radio === "slovensko") {
-            get = $(playButton[2]).parent();
-        } else {}
-
-        var play = $(get).children()[0];
-        var load = $(get).children()[1];
-        var stop = $(get).children()[2];
-
-
         readyStateInterval = setInterval(function(){
             if (stream.readyState <= 2) {
-                play.style.display = 'none';
-                load.style.display = 'block';
+                activityIndicator.style.display = 'block';
             }
         }, 1000);
 
         stream.addEventListener("waiting", function() {
             isPlaying = false;
-            play.style.display = 'none';
-            stop.style.display = 'none';
-            load.style.display = 'block';
+            activityIndicator.style.display = 'block';
         }, false);
 
         stream.addEventListener("playing", function() {
             isPlaying = true;
-            play.style.display = 'none';
-            load.style.display = 'none';
-            stop.style.display = 'block';
+            activityIndicator.style.display = 'none';
         }, false);
 
         stream.addEventListener("ended", function() {
@@ -92,48 +93,17 @@ var html5audio = {
         }, false);
     },
 
-    pause: function() {
-        isPlaying = false;
-        clearInterval(readyStateInterval);
-        stream.pause();
-        stopButton.style.display = 'none';
-        activityIndicator.style.display = 'none';
-        playButton.style.display = 'block';
-    },
-
     resetIcons: function(radio) {
         stream.pause();
 
-        for (var i=0; i<stopButton.length; i++)
-            $(stopButton[i]).css("display","none");
-
-        for (var i=0; i<activityIndicator.length; i++)
-            $(activityIndicator[i]).css("display","none");
-
-        for (var i=0; i<playButton.length; i++)
-            $(playButton[i]).css("display","block");
+        activityIndicator.style.display = 'none';
 
         html5audio.stop(radio);
     },
 
     stop: function(radio) {
-        var get = null;
-        if (radio === "expres") {
-            get = $(playButton[0]).parent();
-        } else if (radio === "funradio") {
-            get = $(playButton[1]).parent();
-        } else if (radio === "slovensko") {
-            get = $(playButton[2]).parent();
-        } else {}
-
         if (radio) {
-            var play = $(get).children()[0];
-            var load = $(get).children()[1];
-            var stop = $(get).children()[2];
-
-            stop.style.display = 'none';
-            load.style.display = 'none';
-            play.style.display = 'block';
+            activityIndicator.style.display = 'none';
         }
 
         isPlaying = false;
@@ -150,6 +120,7 @@ var actual_cover_url = null;
 // Parse stream track info
 var get_song = function(station) {
     function reqListener () {
+        // TODO: Buggy cover when switching from sro to another station, handle this gracefully
         if (station !== "slovensko") {
             var artist_song = null;
             if (station === "expres")
@@ -158,16 +129,17 @@ var get_song = function(station) {
                 artist_song = this.responseText.split("-");
 
             if (artist_song[0] && !artist_song[1]) {
+                $("#artist").text(artist_song[0]);
                 $("#song").text("");
             } else if (!artist_song[0] && artist_song[1]) {
                 $("#artist").text("");
+                $("#song").text(artist_song[1]);
             } else {
                 $("#artist").html(artist_song[0]).text();
                 $("#song").html(artist_song[1]).text();
             }
 
-            // LAST.FM API for getting cover
-            // TODO: Buggy detecting of author and track
+            // LAST.FM API for getting cover of song
             if (artist_song[0] && artist_song[1]) {
                 $.ajax({
                     type: "POST",
@@ -179,8 +151,6 @@ var get_song = function(station) {
                         if (response.querySelector("image")) {
                             var cover_url = response.querySelector("image").textContent;
                         } else {
-
-
                             $("#artist").html(artist_song[0]).text();
                             $("#song").html(artist_song[1]).text();
                         }
@@ -192,7 +162,7 @@ var get_song = function(station) {
 
                             } else {
                                 $('<img src="' + cover_url + '">').load(function() {
-                                    $(this).insertBefore('#playing').css("margin-top", "0px");
+                                    $(this).insertBefore('#playing').addClass("radioimg");
 
                                 });
                             }
@@ -200,22 +170,33 @@ var get_song = function(station) {
                         } else if (!cover_url && actual_cover_url !== cover_url) {
                             if (!document.querySelector("#status > img")) {
                                 $('<img src="images/' + station + '.png">').load(function() {
-                                    $(this).insertBefore('#playing').css("margin-top", "0px");
+                                    $(this).insertBefore('#playing').addClass("radioimg");
                                 });
                             } else {
                                 document.querySelector("#status > img").src = "images/" + station + ".png";
                             }
                             actual_cover_url = cover_url;
                         } else {}
+                    },
+                    error: function(status) {
+                        // If 400, replace image
+                        if (!document.querySelector("#status > img")) {
+                            $('<img src="images/' + station + '.png">').load(function() {
+                                $(this).insertBefore('#playing').addClass("radioimg");
+                            });
+                        } else {
+                            document.querySelector("#status > img").src = "images/" + station +".png";
+                        }
                     }
                 });
             } else {
-                if (document.querySelector("#status > img"))
-                    document.querySelector("#status > img").remove();
-
-                $('<img src="images/' + station + '.png">').load(function() {
-                    $(this).insertBefore('#playing').css("margin-top", "0px");
-                });
+                if (!document.querySelector("#status > img")) {
+                    $('<img src="images/' + station + '.png">').load(function() {
+                        $(this).insertBefore('#playing').addClass("radioimg");
+                    });
+                } else {
+                    document.querySelector("#status > img").src = "images/" + station +".png";
+                }
             }
         } else {
             var html = document.implementation.createHTMLDocument('');
@@ -228,7 +209,7 @@ var get_song = function(station) {
 
             if (!document.querySelector("#status > img")) {
                 $('<img src="images/slovensko.png">').load(function() {
-                    $(this).insertBefore('#playing').css("margin-top", "0px");
+                    $(this).insertBefore('#playing').addClass("radioimg");
                 });
             } else {
                 document.querySelector("#status > img").src = "images/slovensko.png";
@@ -236,6 +217,8 @@ var get_song = function(station) {
 
             $("#artist").text("Rádio Slovensko");
         }
+        if ($(".marquee").text().length > 20)
+            $(".marquee").marquee();
     }
 
     var url = "http://tomastaro.sk/parser" + station + ".php";

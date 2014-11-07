@@ -1,0 +1,59 @@
+<head>
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <script type="text/javascript" src="scripts/jquery.js"></script>
+</head>
+
+<div id="status">
+    <div id="playing">
+        <span id="artist" class="marquee"></span>
+        <span id="song"></span>
+    </div>
+    <div id="activityindicator" data-bb-type="activity-indicator" data-bb-size="medium"></div>
+</div>
+
+<div id="div1" style="margin-top: 125px; position: initial;">
+    <div id="div2" style="height: 1095px; overflow: auto;">
+        <div id="div3">
+            <div id="radios">
+                <div id="expres" class="radio">
+                    <img class="radioimg" src="images/expres.png">
+                    <div class="name">Rádio EXPRES</div>
+                    <div class="description">Baví nás baviť vás</div>
+                </div>
+
+                <div id="funradio" class="radio">
+                    <img class="radioimg" src="images/funradio.png">
+                    <div class="name">FUN Rádio</div>
+                    <div class="description">European Hit Radio</div>
+                </div>
+
+                <div id="slovensko" class="radio">
+                    <img class="radioimg" src="images/slovensko.png">
+                    <div class="name">Rádio Slovensko</div>
+                    <div class="description">Najpočúvanejší okruh RTVS</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="background-color: #f5f5f5;" data-bb-type="screen" data-bb-effect="slide-left" data-bb-scroll-effect="on">
+    <!-- action bar -->
+    <div data-bb-type="action-bar">
+
+        <!-- actions -->
+        <div onclick="bb.pushScreen('cz.html', 'cz');" data-bb-type="action" data-bb-style="button"
+             data-bb-img="images/icons/home.png">České rádiá</div>
+        <!-- Change to general play/stop-->
+        <div onclick="html5audio.stop();" data-bb-type="action" data-bb-style="button"
+             data-bb-img="images/icons/settings.png" data-bb-signature="true">Stop</div>
+        <div onclick="bb.pushScreen('home.html', 'sk');" data-bb-type="action" data-bb-style="button"
+             data-bb-img="images/icons/home.png">Slovenské rádiá</div>
+
+        <!-- actions overflow -->
+        <div data-bb-overflow="true" data-bb-type="action" data-bb-style="button" onclick="bb.pushScreen('settings.html', 'settings');"
+             data-bb-img="images/icons/settings.png">Settings</div>
+        <div data-bb-overflow="true" data-bb-type="action" data-bb-style="button" onclick="bb.pushScreen('about.html', 'about');"
+             data-bb-img="images/icons/info.png">About</div>
+    </div>
+</div>

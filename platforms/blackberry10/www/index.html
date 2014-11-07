@@ -1,76 +1,13 @@
 <html>
     <head>
-        <title></title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
         <meta charset="utf-8">
-        <link rel="stylesheet" type="text/css" href="css/index.css">
-        <script type="text/javascript" src="cordova.js"></script><style type="text/css"></style>
-        <script type="text/javascript" src="scripts/jquery.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/bbui.css">
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="scripts/bbui.js"></script>
+        <script type="text/javascript" src="scripts/app.js"></script>
+        <script type="text/javascript">
+            Application.initialize();
+        </script>
     </head>
-    <body>
-        <div id="index" style="height: 100%;">
-            <div id="radios">
-                <div id="expres" class="radio">
-                    <img src="images/expres.png">
-                    <div class="name">Rádio EXPRES</div>
-                    <div class="description">Baví nás baviť vás</div>
-                    <div class="buttons">
-                        <a href="#" class="playbutton" onclick="html5audio.play('expres');return false;">
-                            <img class="img" src="images/playbutton.png">
-                        </a>
-                        <a href="#" class="activityindicator" onclick="html5audio.stop('expres');return false;">
-                            <img class="img" src="images/activityindicator.gif">
-                        </a>
-                        <a href="#" class="stopbutton" onclick="html5audio.stop('expres');return false;">
-                            <img class="img" src="images/stopbutton.png">
-                        </a>
-                    </div>
-                </div>
-
-                <div id="funradio" class="radio">
-                    <img src="images/funradio.png">
-                    <div class="name">FUN Rádio</div>
-                    <div class="description">European Hit Radio</div>
-                    <div class="buttons">
-                        <a href="#" class="playbutton" onclick="html5audio.play('funradio');return false;">
-                            <img class="img" src="images/playbutton.png">
-                        </a>
-                        <a href="#" class="activityindicator" onclick="html5audio.stop('funradio');return false;">
-                            <img class="img" src="images/activityindicator.gif">
-                        </a>
-                        <a href="#" class="stopbutton" onclick="html5audio.stop('funradio');return false;">
-                            <img class="img" src="images/stopbutton.png">
-                        </a>
-                    </div>
-                </div>
-
-                <div id="slovensko" class="radio">
-                    <img src="images/slovensko.png">
-                    <div class="name">Rádio Slovensko</div>
-                    <div class="description">Najpočúvanejší okruh RTVS</div>
-                    <div class="buttons">
-                        <a href="#" class="playbutton" onclick="html5audio.play('slovensko');return false;">
-                            <img class="img" src="images/playbutton.png">
-                        </a>
-                        <a href="#" class="activityindicator" onclick="html5audio.stop('slovensko');return false;">
-                            <img class="img" src="images/activityindicator.gif">
-                        </a>
-                        <a href="#" class="stopbutton" onclick="html5audio.stop('slovensko');return false;">
-                            <img class="img" src="images/stopbutton.png">
-                        </a>
-                    </div>
-                </div>
-
-            </div>
-
-            <div id="status">
-                <div id="playing">
-                    <span id="artist"></span>
-                    <span id="song"></span>
-                </div>
-            </div>
-
-        </div>
-        <script type="text/javascript" src="scripts/html5audio.js"></script>
-    </body>
 </html>
