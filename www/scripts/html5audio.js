@@ -1,10 +1,4 @@
-// TODO: Make a review of the code, simplify it - long-time approach
-//       Add comments to the code
-// Switch to scroll panel? https://github.com/blackberry/bbUI.js/wiki/Scroll-Panel
-
-// Buttons
-var activityIndicator = document.getElementById('activityindicator');
-
+// If user clicks on station, begin to play it
 $(".radio").click(function() {
     html5audio.play(this.id);
 });
@@ -23,19 +17,21 @@ var expres = {
 }
 
 // Init variables
-var getMetadata = null;         // Function - setInterval() fn, which calls get_song(radio) for updating name of song
-var isPlaying = false;          // Bool - If stream is playing, it's given value is true
+var activityIndicator  = document.getElementById('activityindicator');
+var actual_cover_url   = null;
+var getMetadata        = null;         // Function - setInterval() fn, which calls get_song(radio) for updating name of song
+var isPlaying          = false;          // Bool - If stream is playing, it's given value is true
 var readyStateInterval = null;  // Function - setInterval() fn, see line 63 for more info
-var stream = null;              // Object - HTML5 Audio object
-var streamURL = null;           // String - URL of chosen stream
-var station = null;
+var stream             = null;              // Object - HTML5 Audio object
+var streamURL          = null;           // String - URL of chosen stream
+var station            = null;
 
 // HTML5audio object
 var html5audio = {
     play: function(radio)
     {
         if (isPlaying) {
-            html5audio.resetIcons(radio);
+            html5audio.reset();
             clearInterval(getMetadata);
         }
 
@@ -65,7 +61,8 @@ var html5audio = {
         stream.play();
 
         readyStateInterval = setInterval(function(){
-            if (stream.readyState <= 2) {
+            if (stream.readyState && stream.readyState <= 2) {
+                isPlaying = true;
                 activityIndicator.style.display = 'block';
             }
         }, 1000);
@@ -88,34 +85,26 @@ var html5audio = {
         }, false);
     },
 
-    resetIcons: function(radio) {
-        stream.pause();
-
+    reset: function() {
         activityIndicator.style.display = 'none';
-
-        html5audio.stop(radio);
+        stream.pause();
+        html5audio.stop();
     },
 
-    stop: function(radio) {
-        if (radio) {
-            activityIndicator.style.display = 'none';
-        }
-
-        isPlaying = false;
+    stop: function() {
+        activityIndicator.style.display = 'none';
         clearInterval(readyStateInterval);
         clearInterval(getMetadata);
+        isPlaying = false;
         if (stream)
             stream.pause();
         stream = null;
     }
 };
 
-var actual_cover_url = null;
-
 // Parse stream track info
 var get_song = function(station) {
     function reqListener () {
-        // TODO: Buggy cover when switching from sro to another station, handle this gracefully
         if (station !== "slovensko") {
             var artist_song = null;
             if (station === "expres")
@@ -150,7 +139,8 @@ var get_song = function(station) {
                             $("#song").html(artist_song[1]).text();
                         }
 
-
+                        // We already got url of image -> it means that callback was successful,
+                        // so add image to playing div
                         if (cover_url && actual_cover_url !== cover_url) {
                             if (document.querySelector("#status > img")) {
                                 document.querySelector("#status > img").src = cover_url;
@@ -158,11 +148,10 @@ var get_song = function(station) {
                             } else {
                                 $('<img src="' + cover_url + '">').load(function() {
                                     $(this).insertBefore('#playing').addClass("radioimg");
-
                                 });
                             }
                             actual_cover_url = cover_url;
-                        } else if (!cover_url && actual_cover_url !== cover_url) {
+                        } else if (!cover_url) {
                             if (!document.querySelector("#status > img")) {
                                 $('<img src="images/' + station + '.png">').load(function() {
                                     $(this).insertBefore('#playing').addClass("radioimg");
@@ -174,7 +163,7 @@ var get_song = function(station) {
                         } else {}
                     },
                     error: function(status) {
-                        // If 400, replace image
+                        // Replace image with station image, when error occurs
                         if (!document.querySelector("#status > img")) {
                             $('<img src="images/' + station + '.png">').load(function() {
                                 $(this).insertBefore('#playing').addClass("radioimg");
@@ -185,6 +174,7 @@ var get_song = function(station) {
                     }
                 });
             } else {
+                // If we don't know either name of artist or song, replace img with station img
                 if (!document.querySelector("#status > img")) {
                     $('<img src="images/' + station + '.png">').load(function() {
                         $(this).insertBefore('#playing').addClass("radioimg");
@@ -194,6 +184,7 @@ var get_song = function(station) {
                 }
             }
         } else {
+            // Specific handling of Rádio Slovensko station
             var html = document.implementation.createHTMLDocument('');
             html.documentElement.innerHTML = this.responseText;
             html.querySelector(".ro-slovensko > .playRadio > .overflow > strong").remove();
