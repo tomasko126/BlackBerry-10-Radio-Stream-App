@@ -5,11 +5,6 @@
 // Buttons
 var activityIndicator = document.getElementById('activityindicator');
 
-// Set height of radio ID
-setTimeout(function() {
-    //document.getElementById("radios").style.height = document.querySelectorAll(".radio").length * 127;
-}, 2500);
-
 $(".radio").click(function() {
     html5audio.play(this.id);
 });

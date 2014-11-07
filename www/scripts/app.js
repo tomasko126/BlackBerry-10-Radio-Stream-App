@@ -38,7 +38,7 @@ var Application = {
         });
 
         // start the app
-        bb.pushScreen('home.html', 'home');
+        bb.pushScreen('sk.html', 'sk');
 
     },
 
