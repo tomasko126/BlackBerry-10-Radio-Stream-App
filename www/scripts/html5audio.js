@@ -128,9 +128,9 @@ var get_song = function(station) {
             }
 
             if (station === "jemne") {
-                var parser = new DOMParser();
-                var htmlDoc = parser.parseFromString(this.responseText, "text/html");
-                var text = htmlDoc.getElementsByTagName("body")[0].innerText;
+                var html = document.implementation.createHTMLDocument('');
+                html.documentElement.innerHTML = this.responseText;
+                var text = html.getElementsByTagName("body")[0].innerText;
                 var info = text.replace(/[0-9]/g, "").replace(/,/g,"").split("-");
                 artist_song = [info[0], info[1]];
             }
