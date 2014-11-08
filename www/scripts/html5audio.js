@@ -49,6 +49,9 @@ var html5audio = {
             case "europa2":
                 streamURL = "http://ice2.europa2.sk/fm-europa2sk-128";
                 break;
+            case "jemne":
+                streamURL = "http://93.184.69.143:8000/;jemnemelodie-high-mp3.mp3";
+                break;
         }
         // Init chosen radio station
         stream = new Audio(streamURL);
@@ -58,7 +61,7 @@ var html5audio = {
 
         getMetadata = setInterval(function() {
             get_song(radio);
-        }, 30000);
+        }, 15000);
 
         isPlaying = true;
         stream.play();
@@ -83,7 +86,7 @@ var html5audio = {
         stream.addEventListener("ended", function() {
             html5audio.stop();
             if (window.confirm('Streaming failed. Possibly due to a network error. Retry?')) {
-                html5audio.play(radio);
+                html5audio.play(station);
             }
         }, false);
     },
@@ -106,14 +109,32 @@ var html5audio = {
 };
 
 // Parse stream track info
+// TODO: Don't call ajaxCover() for Expres, Europa 2, Evropa 2 & Frekvence 1,
+//       because cover of track is already included in json callback
 var get_song = function(station) {
     function reqListener () {
         if (station !== "slovensko" && station !== "europa2") {
             var artist_song = null;
-            if (station === "expres")
-                artist_song = this.responseText.split(":");
-            else
-                artist_song = this.responseText.split("-");
+
+            if (station === "funradio") {
+                artist_song = [];
+                artist_song.push($(this.responseText).find("interpret")[0].textContent);
+                artist_song.push($(this.responseText).find("skladba")[0].textContent);
+            }
+
+            if (station === "expres") {
+                var json = JSON.parse(this.responseText);
+                artist_song = [json.stream.artist, json.stream.song];
+            }
+
+            if (station === "jemne") {
+                var parser = new DOMParser();
+                var htmlDoc = parser.parseFromString(this.responseText, "text/html");
+                var text = htmlDoc.getElementsByTagName("body")[0].innerText;
+                var info = text.replace(/[0-9]/g, "").replace(/,/g,"").split("-");
+                artist_song = [info[0], info[1]];
+            }
+            console.log(artist_song);
 
             if (artist_song[0] && !artist_song[1]) {
                 $("#artist").text(artist_song[0]);
@@ -129,6 +150,7 @@ var get_song = function(station) {
             // LAST.FM API for getting cover of song
             if (artist_song[0] && artist_song[1]) {
                 ajaxCover(artist_song[0], artist_song[1]);
+
             } else {
                 // If we don't know either name of artist or song, replace img with station img
                 if (!document.querySelector("#status > img")) {
@@ -152,6 +174,7 @@ var get_song = function(station) {
 
                 $("#artist").text("Rádio Slovensko");
             } else {
+                // TODO: The same for Evropa 2, Frekvence 1
                 $.get("http://rds.lagardere.cz/getRadio.php?station=okey", function(data) {
                     var artist = data.querySelector("songArtist").textContent.
                     replace(/^\s*\/\/<!\[CDATA\[([\s\S]*)\/\/\]\]>\s*\z/,"");

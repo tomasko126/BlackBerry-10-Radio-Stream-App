@@ -52,12 +52,13 @@ table {
     display: inline-block;
 }
 .description {
-    padding: 70px 18px;
+    padding: 0px 18px;
     position: absolute;
     font-family: Helvetica Neue;
     font-weight: 300;
     display: inline;
     font-size: 2.5em;
+    margin-top: 70px;
 }
 .img {
     width: 84px;
@@ -90,6 +91,7 @@ table {
     height: 125px;
     border-bottom: 1px solid rgb(185, 179, 179);
     background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, rgba(199, 199, 199, 0.24)) );
+    -webkit-tap-highlight-color: #0092CC;
 }
 .radioimg {
     width: 110px;

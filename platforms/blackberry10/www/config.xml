@@ -7,4 +7,5 @@
     <access subdomains="false" uri="http://tomastaro.sk" />
     <access subdomains="true" uri="http://audioscrobbler.com" />
     <access subdomains="true" uri="http://last.fm" />
+    <access subdomains="true" uri="http://lagardere.cz/" />
 </widget>
