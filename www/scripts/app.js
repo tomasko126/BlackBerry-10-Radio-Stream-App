@@ -28,7 +28,6 @@ var Application = {
 
             // Fires "before" styling is applied and "before" the screen is inserted in the DOM
             onscreenready: function(element, id) {
-                $.getScript("scripts/marquee.js");
                 $.getScript("scripts/html5audio.js");
             },
 
