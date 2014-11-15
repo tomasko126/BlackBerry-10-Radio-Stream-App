@@ -24,7 +24,7 @@ table {
 #artist {
     display: block;
     margin-top: 10px;
-    font-size: 3em;
+    font-size: 1.2em;
     white-space: nowrap;
 }
 #playing {
@@ -38,7 +38,7 @@ table {
     position: relative;
 }
 #song {
-    font-size: 2.5em;
+    font-size: 1em;
 }
 #status {
     width: 100%;
@@ -57,7 +57,7 @@ table {
     font-family: Helvetica Neue;
     font-weight: 300;
     display: inline;
-    font-size: 2.5em;
+    font-size: 1em;
     margin-top: 70px;
 }
 .img {
@@ -81,7 +81,7 @@ table {
     position: absolute;
     font-family: Helvetica Neue;
     font-weight: 300;
-    font-size: 3em;
+    font-size: 1.2em;
 }
 .parent {
     padding:0px;
