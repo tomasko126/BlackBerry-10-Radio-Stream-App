@@ -1,8 +1,3 @@
-// If user clicks on station, begin to play it
-$(".radio").click(function() {
-    html5audio.play(this.id);
-});
-
 // TODO: Create an object for every station
 var expres = {
     station_name: "Rádio EXPRES",
@@ -17,7 +12,6 @@ var expres = {
 }
 
 // Init variables
-var activityIndicator  = document.getElementById('activityindicator');
 var actual_cover_url   = null;
 var getMetadata        = null;         // Function - setInterval() fn, which calls get_song(radio) for updating name of song
 var isPlaying          = false;        // Bool - If stream is playing, it's given value is true
@@ -69,18 +63,19 @@ var html5audio = {
         readyStateInterval = setInterval(function(){
             if (stream.readyState && stream.readyState <= 2) {
                 isPlaying = true;
-                activityIndicator.style.display = 'block';
+                console.log(document.getElementById('activityindicator'));
+                document.getElementById('activityindicator').style.display = 'block';
             }
         }, 1000);
 
         stream.addEventListener("waiting", function() {
             isPlaying = false;
-            activityIndicator.style.display = 'block';
+            document.getElementById('activityindicator').style.display = 'block';
         }, false);
 
         stream.addEventListener("playing", function() {
             isPlaying = true;
-            activityIndicator.style.display = 'none';
+            document.getElementById('activityindicator').style.display = 'none';
         }, false);
 
         stream.addEventListener("ended", function() {
@@ -92,19 +87,20 @@ var html5audio = {
     },
 
     reset: function() {
-        activityIndicator.style.display = 'none';
+        document.getElementById('activityindicator').style.display = 'none';
         stream.pause();
         html5audio.stop();
     },
 
     stop: function() {
-        activityIndicator.style.display = 'none';
+        document.getElementById('activityindicator').style.display = 'none';
         clearInterval(readyStateInterval);
         clearInterval(getMetadata);
         isPlaying = false;
         if (stream)
             stream.pause();
         stream = null;
+        actual_cover_url = null;
     }
 };
 
@@ -134,7 +130,6 @@ var get_song = function(station) {
                 var info = text.replace(/[0-9]/g, "").replace(/,/g,"").split("-");
                 artist_song = [info[0], info[1]];
             }
-            console.log(artist_song);
 
             if (artist_song[0] && !artist_song[1]) {
                 $("#artist").text(artist_song[0]);
@@ -207,12 +202,15 @@ var get_song = function(station) {
         }
     }
 
-    var url = "http://tomastaro.sk/parser" + station + ".php";
+    if (station) {
+        var url = "http://tomastaro.sk/parser" + station + ".php";
 
-    var xhr = new XMLHttpRequest();
-    xhr.onload = reqListener;
-    xhr.open("get", url, true);
-    xhr.send();
+        var xhr = new XMLHttpRequest();
+        xhr.onload = reqListener;
+        xhr.open("get", url, true);
+        xhr.send();
+    }
+
 }
 
 function ajaxCover(artist, track) {

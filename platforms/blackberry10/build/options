@@ -8,12 +8,14 @@
 -C
 /Users/Tomas/Desktop/BB10-WebWorks-Online-Radio-Stream-App/platforms/blackberry10/build/src
 bar-descriptor.xml
+/Users/Tomas/Desktop/BB10-WebWorks-Online-Radio-Stream-App/platforms/blackberry10/build/src/about.html
 /Users/Tomas/Desktop/BB10-WebWorks-Online-Radio-Stream-App/platforms/blackberry10/build/src/config.xml
 /Users/Tomas/Desktop/BB10-WebWorks-Online-Radio-Stream-App/platforms/blackberry10/build/src/cordova.js
 /Users/Tomas/Desktop/BB10-WebWorks-Online-Radio-Stream-App/platforms/blackberry10/build/src/cordova_plugins.js
 /Users/Tomas/Desktop/BB10-WebWorks-Online-Radio-Stream-App/platforms/blackberry10/build/src/cz.html
 /Users/Tomas/Desktop/BB10-WebWorks-Online-Radio-Stream-App/platforms/blackberry10/build/src/default-icon.png
 /Users/Tomas/Desktop/BB10-WebWorks-Online-Radio-Stream-App/platforms/blackberry10/build/src/index.html
+/Users/Tomas/Desktop/BB10-WebWorks-Online-Radio-Stream-App/platforms/blackberry10/build/src/settings.html
 /Users/Tomas/Desktop/BB10-WebWorks-Online-Radio-Stream-App/platforms/blackberry10/build/src/sk.html
 /Users/Tomas/Desktop/BB10-WebWorks-Online-Radio-Stream-App/platforms/blackberry10/build/src/wwe
 /Users/Tomas/Desktop/BB10-WebWorks-Online-Radio-Stream-App/platforms/blackberry10/build/src/chrome/frameworkModules.js
@@ -41,8 +43,10 @@ bar-descriptor.xml
 /Users/Tomas/Desktop/BB10-WebWorks-Online-Radio-Stream-App/platforms/blackberry10/build/src/images/icons/settings.png
 /Users/Tomas/Desktop/BB10-WebWorks-Online-Radio-Stream-App/platforms/blackberry10/build/src/images/icons/stop.png
 /Users/Tomas/Desktop/BB10-WebWorks-Online-Radio-Stream-App/platforms/blackberry10/build/src/plugins/jnext/auth.txt
+/Users/Tomas/Desktop/BB10-WebWorks-Online-Radio-Stream-App/platforms/blackberry10/build/src/scripts/.DS_Store
 /Users/Tomas/Desktop/BB10-WebWorks-Online-Radio-Stream-App/platforms/blackberry10/build/src/scripts/app.js
 /Users/Tomas/Desktop/BB10-WebWorks-Online-Radio-Stream-App/platforms/blackberry10/build/src/scripts/bbui.js
+/Users/Tomas/Desktop/BB10-WebWorks-Online-Radio-Stream-App/platforms/blackberry10/build/src/scripts/helper.js
 /Users/Tomas/Desktop/BB10-WebWorks-Online-Radio-Stream-App/platforms/blackberry10/build/src/scripts/html5audio.js
 /Users/Tomas/Desktop/BB10-WebWorks-Online-Radio-Stream-App/platforms/blackberry10/build/src/scripts/jquery.js
 /Users/Tomas/Desktop/BB10-WebWorks-Online-Radio-Stream-App/platforms/blackberry10/build/src/scripts/marquee.js

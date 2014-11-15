@@ -28,11 +28,11 @@ var Application = {
 
             // Fires "before" styling is applied and "before" the screen is inserted in the DOM
             onscreenready: function(element, id) {
-                $.getScript("scripts/html5audio.js");
             },
 
             // Fires "after" styling is applied and "after" the screen is inserted in the DOM
             ondomready: function(element, id) {
+                $.getScript("scripts/helper.js");
             }
         });
 
