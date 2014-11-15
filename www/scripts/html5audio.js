@@ -160,7 +160,7 @@ var getName = function(station) {
 
                     if (artist && song) {
                         getCover(artist, song);
-                        songMetadata = [metadata[0], metadata[1]];
+                        songMetadata = [artist, song];
                     }
 
                     $("#artist").text(function() {
