@@ -1,4 +1,4 @@
-// TODO: Create an object for every station
+// TODO: Create an object for every station, low-priority atm
 var expres = {
     station_name: "Rádio EXPRES",
     station_description: "Baví nás baviť vás",
@@ -25,8 +25,7 @@ var html5audio = {
     play: function(radio)
     {
         if (isPlaying) {
-            html5audio.reset();
-            clearInterval(getMetadata);
+            html5audio.stop();
         }
 
         // TODO: Implement switching of quality of stream
@@ -63,7 +62,6 @@ var html5audio = {
         readyStateInterval = setInterval(function(){
             if (stream.readyState && stream.readyState <= 2) {
                 isPlaying = true;
-                console.log(document.getElementById('activityindicator'));
                 document.getElementById('activityindicator').style.display = 'block';
             }
         }, 1000);
@@ -85,13 +83,6 @@ var html5audio = {
             }
         }, false);
     },
-
-    reset: function() {
-        document.getElementById('activityindicator').style.display = 'none';
-        stream.pause();
-        html5audio.stop();
-    },
-
     stop: function() {
         document.getElementById('activityindicator').style.display = 'none';
         clearInterval(readyStateInterval);
@@ -210,7 +201,6 @@ var get_song = function(station) {
         xhr.open("get", url, true);
         xhr.send();
     }
-
 }
 
 function ajaxCover(artist, track) {
@@ -220,7 +210,6 @@ function ajaxCover(artist, track) {
         data: { method: "track.getInfo", api_key: "cdfa596938a9f8083739ee5ee08e7e29",
                artist: artist, track: track },
         success: function(response) {
-
             if (response.querySelector("image")) {
                 var cover_url = response.querySelector("image").textContent;
             } else {
