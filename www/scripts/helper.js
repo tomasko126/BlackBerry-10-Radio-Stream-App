@@ -4,12 +4,19 @@ $(".radio").click(function() {
 });
 
 // Fetch metadata for currently playing track
-if (actualCoverUrl && isPlaying) {
-    $('<img src="' + actualCoverUrl + '">').load(function() {
-        $(this).insertBefore('#playing').addClass("radioimg");
-    });
+if (isPlaying) {
+    if (actualCoverUrl) {
+        $('<img src="' + actualCoverUrl + '">').load(function() {
+            $(this).insertBefore('#playing').addClass("radioimg");
+        });
+    } else {
+        $('<img src="images/' + station + '.png">').load(function() {
+            $(this).insertBefore('#playing').addClass("radioimg");
+        });
+    }
 }
 
-if (station) {
-    getName(station);
+if (songMetadata && isPlaying) {
+    $("#artist").text(songMetadata[0]);
+    $("#song").text(songMetadata[1]);
 }

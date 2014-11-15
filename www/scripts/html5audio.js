@@ -12,10 +12,10 @@ var expres = {
 }
 
 // Init variables
-var actualCoverUrl   = null;
+var actualCoverUrl     = null;         // String   - URL of cover
 var getMetadata        = null;         // Function - setInterval() fn, which calls getName(radio) for updating name of song
 var isPlaying          = false;        // Bool     - If stream is playing, it's given value is true
-var readyStateInterval = null;         // Function - setInterval() fn, see line 63 for more info
+var songMetadata       = null;         // Array    - Contains name of artist and name of song
 var stream             = null;         // Object   - HTML5 Audio object
 var streamUrl          = null;         // String   - URL of chosen radio stream
 var station            = null;         // String   - name of playing radio stream
@@ -58,15 +58,7 @@ var html5audio = {
             getName(radio);
         }, 15000);
 
-        isPlaying = true;
         stream.play();
-
-        readyStateInterval = setInterval(function(){
-            if (stream.readyState && stream.readyState <= 2) {
-                isPlaying = true;
-                document.getElementById('activityindicator').style.display = 'block';
-            }
-        }, 1000);
 
         stream.addEventListener("waiting", function() {
             isPlaying = false;
@@ -87,7 +79,6 @@ var html5audio = {
     },
     stop: function() {
         document.getElementById('activityindicator').style.display = 'none';
-        clearInterval(readyStateInterval);
         clearInterval(getMetadata);
         if (stream)
             stream.pause();
@@ -138,7 +129,7 @@ var getName = function(station) {
             // LAST.FM API for getting cover of song
             if (metadata[0] && metadata[1]) {
                 getCover(metadata[0], metadata[1]);
-
+                songMetadata = [metadata[0], metadata[1]];
             } else {
                 // If we don't know either name of artist or song, replace img with station img
                 if (!document.querySelector("#status > img")) {
@@ -167,8 +158,10 @@ var getName = function(station) {
                     var song = data.querySelector("songTitle").textContent.
                     replace(/^\s*\/\/<!\[CDATA\[([\s\S]*)\/\/\]\]>\s*\z/,"");
 
-                    if (artist && song)
+                    if (artist && song) {
                         getCover(artist, song);
+                        songMetadata = [metadata[0], metadata[1]];
+                    }
 
                     $("#artist").text(function() {
                         return artist;
@@ -187,10 +180,9 @@ var getName = function(station) {
             } else {
                 document.querySelector("#status > img").src = "images/" + station +".png";
             }
-
-            if ($(".marquee").text().length > 20)
-                $(".marquee").marquee();
         }
+        if ($(".marquee").text().length > 20)
+            $(".marquee").marquee();
     }
 
     if (station) {
