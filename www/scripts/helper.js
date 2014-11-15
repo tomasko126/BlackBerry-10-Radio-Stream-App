@@ -4,12 +4,12 @@ $(".radio").click(function() {
 });
 
 // Fetch metadata for currently playing track
-if (actual_cover_url) {
-    $('<img src="' + actual_cover_url + '">').load(function() {
+if (actualCoverUrl && isPlaying) {
+    $('<img src="' + actualCoverUrl + '">').load(function() {
         $(this).insertBefore('#playing').addClass("radioimg");
     });
 }
 
 if (station) {
-    get_song(station);
+    getName(station);
 }
