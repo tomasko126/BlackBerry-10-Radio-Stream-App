@@ -181,8 +181,10 @@ var getName = function(station) {
                 document.querySelector("#status > img").src = "images/" + station +".png";
             }
         }
-        if ($(".marquee").text().length > 20)
-            $(".marquee").marquee();
+
+        for (var i=0; i < document.getElementsByClassName("marquee").length; i++)
+            if (document.getElementsByClassName("marquee")[i].textContent.length > 20)
+                document.getElementsByClassName("marquee")[i].marquee();
     }
 
     if (station) {
