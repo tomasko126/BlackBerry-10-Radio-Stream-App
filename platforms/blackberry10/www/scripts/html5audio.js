@@ -24,7 +24,9 @@ var station            = null;         // String   - name of playing radio strea
 var html5audio = {
     play: function(radio)
     {
-        if (isPlaying) {
+        isPlaying = true;
+
+        if (stream) {
             html5audio.stop();
         }
 
@@ -78,10 +80,9 @@ var html5audio = {
         }, false);
     },
     stop: function() {
+        stream.pause();
         document.getElementById('activityindicator').style.display = 'none';
         clearInterval(getMetadata);
-        if (stream)
-            stream.pause();
         stream = null;
         isPlaying = false;
         actualCoverUrl = null;
@@ -173,18 +174,24 @@ var getName = function(station) {
                 });
             }
 
-            if (!document.querySelector("#status > img")) {
-                $('<img src="images/' + station + '.png">').load(function() {
-                    $(this).insertBefore('#playing').addClass("radioimg");
-                });
-            } else {
-                document.querySelector("#status > img").src = "images/" + station +".png";
+            if (!actualCoverUrl) {
+                if (!document.querySelector("#status > img")) {
+                    $('<img src="images/' + station + '.png">').load(function() {
+                        $(this).insertBefore('#playing').addClass("radioimg");
+                    });
+                } else {
+                    document.querySelector("#status > img").src = "images/" + station +".png";
+                }
             }
         }
 
-        for (var i=0; i < document.getElementsByClassName("marquee").length; i++)
-            if (document.getElementsByClassName("marquee")[i].textContent.length > 20)
-                document.getElementsByClassName("marquee")[i].marquee();
+        // Marquee, if name of artist/name of song is long
+        if ($("#artist").text().length > 20)
+            $("#artist").marquee();
+
+        if ($("#song").text().length > 20)
+            $("#song").marquee();
+
     }
 
     if (station) {

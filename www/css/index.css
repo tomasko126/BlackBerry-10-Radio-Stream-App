@@ -39,6 +39,8 @@ table {
 }
 #song {
     font-size: 1em;
+    display: block;
+    white-space: nowrap;
 }
 #status {
     width: 100%;
