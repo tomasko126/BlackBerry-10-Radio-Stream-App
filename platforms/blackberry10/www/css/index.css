@@ -27,6 +27,9 @@ table {
     font-size: 1.2em;
     white-space: nowrap;
 }
+#body {
+    display: none;
+}
 #playing {
     display: inline-block;
     margin-left: 18px;

@@ -27,6 +27,8 @@ var html5audio = {
         isPlaying = true;
 
         if (stream) {
+            $("#artist").removeClass('animated fadeIn');
+            $("#song").removeClass('animated fadeIn');
             html5audio.stop();
         }
 
@@ -101,11 +103,13 @@ var getName = function(station) {
                 metadata = [];
                 metadata.push($(this.responseText).find("interpret")[0].textContent);
                 metadata.push($(this.responseText).find("skladba")[0].textContent);
+                songMetadata = [metadata[0], metadata[1]];
             }
 
             if (station === "expres") {
                 var json = JSON.parse(this.responseText);
                 metadata = [json.stream.artist, json.stream.song];
+                songMetadata = [metadata[0], metadata[1]];
             }
 
             if (station === "jemne") {
@@ -114,17 +118,23 @@ var getName = function(station) {
                 var text = html.getElementsByTagName("body")[0].innerText;
                 var info = text.replace(/[0-9]/g, "").replace(/,/g,"").split("-");
                 metadata = [info[0], info[1]];
+                songMetadata = [metadata[0], metadata[1]];
             }
 
             if (metadata[0] && !metadata[1]) {
-                $("#artist").text(metadata[0]);
+                $("#artist").addClass('animated fadeIn').text(metadata[0]);
                 $("#song").text("");
             } else if (!metadata[0] && metadata[1]) {
                 $("#artist").text("");
-                $("#song").text(metadata[1]);
+                $("#song").addClass('animated fadeIn').text(metadata[1]);
+            } else if (metadata[0] && metadata[1]) {
+                $("#artist").addClass('animated fadeIn').html(metadata[0]).text();
+                $("#song").addClass('animated fadeIn').html(metadata[1]).text();
             } else {
-                $("#artist").html(metadata[0]).text();
-                $("#song").html(metadata[1]).text();
+                if (station === "jemne") {
+                    $("#artist").text("Rádio Jemné");
+                    $("#song").text("Pohodová muzika");
+                }
             }
 
             // LAST.FM API for getting cover of song
@@ -135,19 +145,22 @@ var getName = function(station) {
                 // If we don't know either name of artist or song, replace img with station img
                 if (!document.querySelector("#status > img")) {
                     $('<img src="images/' + station + '.png">').load(function() {
-                        $(this).insertBefore('#playing').addClass("radioimg");
+                        $(this).insertBefore('#playing').addClass("radioimg animated fadeIn");
                     });
                 } else {
+                    $("#status > img").addClass("animated fadeIn");
                     document.querySelector("#status > img").src = "images/" + station +".png";
                 }
             }
+            if (metadata && metadata[0] && metadata[1])
+                marquee();
         } else {
             if (station === "slovensko") {
                 var html = document.implementation.createHTMLDocument('');
                 html.documentElement.innerHTML = this.responseText;
                 html.querySelector(".ro-slovensko > .playRadio > .overflow > strong").remove();
-                $("#artist").text("Rádio Slovensko");
-                $("#song").text(function() {
+                $("#artist").addClass('animated fadeIn').text("Rádio Slovensko");
+                $("#song").addClass('animated fadeIn').text(function() {
                     var text = html.querySelector(".ro-slovensko > .playRadio > .overflow").textContent;
                     return text.replace(/-/,"").replace(" ","");
                 });
@@ -162,13 +175,14 @@ var getName = function(station) {
                     if (artist && song) {
                         getCover(artist, song);
                         songMetadata = [artist, song];
+                        marquee();
                     }
 
-                    $("#artist").text(function() {
+                    $("#artist").addClass('animated fadeIn').text(function() {
                         return artist;
                     });
 
-                    $("#song").text(function() {
+                    $("#song").addClass('animated fadeIn').text(function() {
                         return song;
                     });
                 });
@@ -177,21 +191,14 @@ var getName = function(station) {
             if (!actualCoverUrl) {
                 if (!document.querySelector("#status > img")) {
                     $('<img src="images/' + station + '.png">').load(function() {
-                        $(this).insertBefore('#playing').addClass("radioimg");
+                        $(this).insertBefore('#playing').addClass("radioimg animated fadeIn");
                     });
                 } else {
+                    $("#status > img").addClass("animated fadeIn");
                     document.querySelector("#status > img").src = "images/" + station +".png";
                 }
             }
         }
-
-        // Marquee, if name of artist/name of song is long
-        if ($("#artist").text().length > 20)
-            $("#artist").marquee();
-
-        if ($("#song").text().length > 20)
-            $("#song").marquee();
-
     }
 
     if (station) {
@@ -214,28 +221,29 @@ function getCover(artist, track) {
             if (response.querySelector("image")) {
                 var cover_url = response.querySelector("image").textContent;
             } else {
-                $("#artist").html(artist).text();
-                $("#song").html(track).text();
+                $("#artist").addClass('animated fadeIn').html(artist).text();
+                $("#song").addClass('animated fadeIn').html(track).text();
             }
 
             // We already got url of image -> it means that callback was successful,
             // so add image to playing div
             if (cover_url && actualCoverUrl !== cover_url) {
                 if (document.querySelector("#status > img")) {
+                    $("#status > img").addClass("animated fadeIn");
                     document.querySelector("#status > img").src = cover_url;
-
                 } else {
                     $('<img src="' + cover_url + '">').load(function() {
-                        $(this).insertBefore('#playing').addClass("radioimg");
+                        $(this).insertBefore('#playing').addClass("radioimg animated fadeIn");
                     });
                 }
                 actualCoverUrl = cover_url;
             } else if (!cover_url) {
                 if (!document.querySelector("#status > img")) {
                     $('<img src="images/' + station + '.png">').load(function() {
-                        $(this).insertBefore('#playing').addClass("radioimg");
+                        $(this).insertBefore('#playing').addClass("radioimg animated fadeIn");
                     });
                 } else {
+                    $("#status > img").addClass("animated fadeIn");
                     document.querySelector("#status > img").src = "images/" + station + ".png";
                 }
                 actualCoverUrl = cover_url;
@@ -245,11 +253,22 @@ function getCover(artist, track) {
             // Replace image with station image, when error occurs
             if (!document.querySelector("#status > img")) {
                 $('<img src="images/' + station + '.png">').load(function() {
-                    $(this).insertBefore('#playing').addClass("radioimg");
+                    $(this).insertBefore('#playing').addClass("radioimg animated fadeIn");
                 });
             } else {
+                $("#status > img").addClass("animated fadeIn");
                 document.querySelector("#status > img").src = "images/" + station +".png";
             }
         }
     });
+}
+
+function marquee() {
+    setTimeout(function() {
+    if (songMetadata[0].length > 20)
+        $("#artist").marquee();
+
+    if (songMetadata[1].length > 20)
+        $("#song").marquee();
+    }, 50);
 }

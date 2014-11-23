@@ -27,11 +27,22 @@ var Application = {
             listsDark: false,
 
             // Fires "before" styling is applied and "before" the screen is inserted in the DOM
-            onscreenready: function(element, id) {
+            onscreenready: function(element, id, params) {
+                if (isPlaying) {
+                    if (params && params.image) {
+                        $('<img src="' + params.image + '">').load(function() {
+                            $(this).insertBefore('#playing').addClass("animated fadeIn radioimg");
+                        });
+                    } else {
+                        $('<img src="images/' + station + '.png">').load(function() {
+                            $(this).insertBefore('#playing').addClass("animated fadeIn radioimg");
+                        });
+                    }
+                }
             },
 
             // Fires "after" styling is applied and "after" the screen is inserted in the DOM
-            ondomready: function(element, id) {
+            ondomready: function(element, id, params) {
                 $.getScript("scripts/helper.js");
             }
         });

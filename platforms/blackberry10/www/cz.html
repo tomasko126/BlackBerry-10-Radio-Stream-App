@@ -1,5 +1,4 @@
 <div data-bb-type="screen" data-bb-scroll-effect="off">
-
     <div id="status">
         <div id="playing">
             <span id="artist" class="marquee"></span>
@@ -7,38 +6,38 @@
         </div>
         <div id="activityindicator" data-bb-type="activity-indicator" data-bb-size="medium"></div>
     </div>
+    <div id="body">
+        <div data-bb-type="scroll-panel" style="height: 1010px; margin-top: 125px;">
+            <div id="radios">
+                <div id="expres" class="radio">
+                    <img class="radioimg" src="images/expres.png">
+                    <div class="name">Radio</div>
+                    <div class="description">Description</div>
+                </div>
 
-    <div data-bb-type="scroll-panel" style="height: 1010px; margin-top: 125px;">
-        <div id="radios">
-            <div id="expres" class="radio">
-                <img class="radioimg" src="images/expres.png">
-                <div class="name">Radio</div>
-                <div class="description">Description</div>
-            </div>
+                <div id="funradio" class="radio">
+                    <img class="radioimg" src="images/funradio.png">
+                    <div class="name">Radio</div>
+                    <div class="description">Description</div>
+                </div>
 
-            <div id="funradio" class="radio">
-                <img class="radioimg" src="images/funradio.png">
-                <div class="name">Radio</div>
-                <div class="description">Description</div>
-            </div>
-
-            <div id="slovensko" class="radio">
-                <img class="radioimg" src="images/slovensko.png">
-                <div class="name">Radio</div>
-                <div class="description">Description</div>
+                <div id="slovensko" class="radio">
+                    <img class="radioimg" src="images/slovensko.png">
+                    <div class="name">Radio</div>
+                    <div class="description">Description</div>
+                </div>
             </div>
         </div>
     </div>
-
     <!-- action bar -->
     <div data-bb-type="action-bar">
         <!-- actions -->
-        <div onclick="bb.pushScreen('cz.html', 'cz');" data-bb-type="action" data-bb-style="button"
+        <div onclick="$('#body').addClass('animated zoomOut'); setTimeout(function() {bb.pushScreen('cz.html', 'cz', { image: actualCoverUrl});}, 500);" data-bb-type="action" data-bb-style="button"
              data-bb-img="images/icons/home.png">České rádiá</div>
         <!-- Change to general play/stop-->
         <div onclick="html5audio.stop();" data-bb-type="action" data-bb-style="button"
              data-bb-img="images/icons/stop.png" data-bb-signature="true">Stop</div>
-        <div onclick="bb.pushScreen('sk.html', 'sk');" data-bb-type="action" data-bb-style="button"
+        <div onclick="$('#body').addClass('animated zoomOut'); setTimeout(function() {bb.pushScreen('sk.html', 'sk', { image: actualCoverUrl});}, 500);" data-bb-type="action" data-bb-style="button"
              data-bb-img="images/icons/home.png">Slovenské rádiá</div>
 
         <!-- actions overflow -->

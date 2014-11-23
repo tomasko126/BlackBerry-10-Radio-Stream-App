@@ -3,20 +3,11 @@ $(".radio").click(function() {
     html5audio.play(this.id);
 });
 
-// Fetch metadata for currently playing track
-if (isPlaying) {
-    if (actualCoverUrl) {
-        $('<img src="' + actualCoverUrl + '">').load(function() {
-            $(this).insertBefore('#playing').addClass("radioimg");
-        });
-    } else {
-        $('<img src="images/' + station + '.png">').load(function() {
-            $(this).insertBefore('#playing').addClass("radioimg");
-        });
-    }
-}
+$('#body').css("display","block").addClass('animated zoomIn');
 
+// Fetch metadata for currently playing track
 if (songMetadata && isPlaying) {
-    $("#artist").text(songMetadata[0]);
-    $("#song").text(songMetadata[1]);
+    $("#artist").addClass('animated fadeIn').text(songMetadata[0]);
+    $("#song").addClass('animated fadeIn').text(songMetadata[1]);
+    marquee();
 }
