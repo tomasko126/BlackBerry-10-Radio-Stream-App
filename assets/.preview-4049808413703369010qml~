@@ -1,0 +1,133 @@
+// Tabbed Pane project template
+import bb.cascades 1.0
+
+TabbedPane {
+	showTabsOnActionBar: true;
+    Menu.definition: MenuDefinition {
+        // Specify the actions that should be included in the menu
+        actions: [
+            ActionItem {
+                title: qsTr("Refresh...")
+                imageSource: "asset:///images/refreshicon.png"
+                onTriggered: {
+                    slideOutAnimation.play();
+                    app.showToast("Refreshing data..");
+                    myWebView.reload();
+                    slideInAnimation.play();
+                }
+            }
+        ] // end of actions list
+        helpAction: HelpActionItem {
+            title: qsTr("Info")
+            imageSource: "asset:///images/ic_info.png"
+            onTriggered: {
+                app.showToast("Info clicked.");
+            }
+        }
+    } // end of MenuDefinition
+
+    Tab {        
+        id: simple
+        title: 'Simple View'
+        Page {
+            Container {
+                background: Color.create(0.25, 0.25, 0.25)
+
+                // Header Container
+                Container {
+                    animations: [
+                        TranslateTransition {
+                            id: translateAnimation
+                            fromY: 300
+                            toY: 0
+                            fromX: -600
+                            toX: 0
+                            duration: 3000
+                            easingCurve: StockCurve.QuadraticInOut
+                        },
+                        RotateTransition {
+                            id: rotateAnimation
+                            fromAngleZ: 90
+                            toAngleZ: 0
+                            duration: 3000
+                        }
+                    ]
+                    layout: StackLayout {
+                        orientation: LayoutOrientation.LeftToRight
+
+                    }
+
+                    horizontalAlignment: HorizontalAlignment.Center
+                    ImageView {
+                        imageSource: "asset:///images/gas.png"
+                    }
+                    Label {
+                        verticalAlignment: VerticalAlignment.Center
+                        textStyle {
+                            color: Color.White
+                            fontWeight: FontWeight.Bold
+                            fontSize: FontSize.Large
+                        }
+                        text: "Gas Totals"
+                    }
+                }
+
+                ScrollView {
+                    animations: [
+                        TranslateTransition {
+                            id: slideInAnimation
+                            fromY: 1000
+                            toY: -10
+                            duration: 4000
+                            easingCurve: StockCurve.QuadraticIn
+                        },
+                        TranslateTransition {
+                            id: slideOutAnimation
+                            fromY: -10
+                            toY: 1000
+                            duration: 4000
+                            easingCurve: StockCurve.QuadraticIn
+                        }
+                    ]
+
+                    WebView {
+                        id: myWebView
+                        settings.background: Color.Transparent
+                        url: "local:///assets/simple.html"
+                    }
+                }
+            }
+        }
+    }
+
+    Tab {
+        id: graphical
+        title: 'Graphical View'
+        content: Page {
+            Container {
+                background: Color.create(0.25, 0.25, 0.25)
+
+                ScrollView {
+
+                    WebView {
+                        //settings.background: Color.Transparent
+                        url: "local:///assets/graph.html"
+                    }
+                }
+            }
+        }
+    }
+
+    onCreationCompleted: {
+        translateAnimation.play();
+        rotateAnimation.play();
+        slideInAnimation.play();
+        // this slot is called when declarative scene is created
+        // write post creation initialization here
+
+        // enable layout to adapt to the device rotation
+        // don't forget to enable screen rotation in bar-bescriptor.xml (Application->Orientation->Auto-orient)
+        OrientationSupport.supportedDisplayOrientation = SupportedDisplayOrientation.DisplayPortrait;
+    }
+
+}

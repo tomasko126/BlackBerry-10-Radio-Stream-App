@@ -1,0 +1,141 @@
+import bb.cascades 1.0
+
+//=-=-=-=-=-=-=-=-=-=-=-=-=
+// Set up your basic page
+//=-=-=-=-=-=-=-=-=-=-=-=-=
+Page {
+    //=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Top menu
+    //=-=-=-=-=-=-=-=-=-=-=-=-=
+    Menu.definition: MenuDefinition {
+        // Specify the actions that should be included in the menu
+        // (make sure you've included the extra C++ code to enable toasts)
+        actions: [
+            ActionItem {
+                title: qsTr("Config")
+                imageSource: "asset:///images/ic_edit.png"
+                onTriggered: {
+                    app.showToast("Setting up users");
+                }
+            },
+            ActionItem {
+                title: qsTr("Refresh...")
+                imageSource: "asset:///images/ajax-loader.gif"
+                onTriggered: {
+                    slideOutAnimation.play();
+                    app.showToast("Refreshing data..");
+                    myWebView.reload();
+                    slideInAnimation.play();
+                }
+            }
+        ] 
+        helpAction: HelpActionItem {
+            title: qsTr("Info")
+            imageSource: "asset:///images/ic_info.png"
+            onTriggered: {
+                app.showToast("GasCard version 1.3\nCreated by Rebecca Barthelmess\nCopyright 2012");
+            }
+        }
+    }
+
+    //=-=-=-=-=-=-=-=-=-=-=-=-=
+    // Main page container
+    //=-=-=-=-=-=-=-=-=-=-=-=-=
+    Container {
+        background: backgroundPaint.imagePaint
+        
+        // Let's set up a fancy header icon... with text and animations
+        Container {
+            // Define animations for header icon
+            animations: [
+                TranslateTransition {
+                    id: translateAnimation
+                    fromY: 300
+                    toY: 0
+                    fromX: -600
+                    toX: 0
+                    duration: 3000
+                    easingCurve: StockCurve.QuadraticInOut
+                },
+                RotateTransition {
+                    id: rotateAnimation
+                    fromAngleZ: 90
+                    toAngleZ: 0
+                    duration: 3000
+                }
+            ]
+            layout: StackLayout {
+                orientation: LayoutOrientation.LeftToRight
+            }
+            horizontalAlignment: HorizontalAlignment.Center
+            ImageView {
+                imageSource: "asset:///images/gas.png"
+            }
+            Label {
+                verticalAlignment: VerticalAlignment.Center
+                textStyle {
+                    color: Color.White
+                    fontWeight: FontWeight.Bold
+                    fontSize: FontSize.Large
+                }
+                text: "Gas Totals"
+            }
+        }
+        
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        // Our main content page sits in this scrollview
+        // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        ScrollView {
+            animations: [
+                TranslateTransition {
+                    id: slideInAnimation
+                    fromY: 1000
+                    toY: -10
+                    duration: 4000
+                    easingCurve: StockCurve.QuadraticIn
+                },
+                TranslateTransition {
+                    id: slideOutAnimation
+                    fromY: -10
+                    toY: 1000
+                    duration: 4000
+                    easingCurve: StockCurve.QuadraticIn
+                }
+            ]
+
+            WebView {
+                opacity: 0.5
+                id: myWebView
+                settings.background: Color.Transparent
+                url: "local:///assets/simple.html"
+            }
+        }
+    }
+    
+    // Set background image and font for main page
+    attachedObjects: [
+        TextStyleDefinition {
+            id: stdTextStyle
+            base: SystemDefaults.TextStyles.BigText
+            fontWeight: FontWeight.Bold
+            color: Color.create("#ff5D5D5D")
+        },
+        ImagePaintDefinition {
+            id: backgroundPaint
+            repeatPattern: RepeatPattern.XY
+            imageSource: "asset:///images/carbon.jpg"
+        }
+    ]
+
+	// Run all our animations once the Cascades page has been initialized
+    onCreationCompleted: {
+        translateAnimation.play();
+        rotateAnimation.play();
+        slideInAnimation.play();
+
+        // enable layout to adapt to the device rotation
+        // don't forget to enable screen rotation in bar-bescriptor.xml (Application->Orientation->Auto-orient)
+        OrientationSupport.supportedDisplayOrientation = SupportedDisplayOrientation.DisplayPortrait;
+    }
+
+}

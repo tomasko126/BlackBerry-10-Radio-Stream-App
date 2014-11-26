@@ -1,5 +1,7 @@
-**How to test on Windows/Unix/OS X?**
+## How to Build
 
-1. Clone repo (e.g. on your desktop)
-2. Open folder of cloned repo and after that /www folder
-3. Open index.html file in browser
+1. Import the project into QNX Momentics IDE.
+
+2. Build the application using build option in IDE.
+
+3. To deploy use the Run option from IDE.
