@@ -1,11 +1,11 @@
+// Begun animation
+$('#body').css("display","block").addClass('animated zoomIn');
+
 // If user clicks on station, begin to play it
 $(".radio").click(function() {
     html5audio.play(this.id);
 });
 
-$('#body').css("display","block").addClass('animated zoomIn');
-
-// TODO: Create an object for every station, low-priority atm
 var expres = {
     stationName: "Rádio EXPRES",
     stationDescription: "Baví nás baviť vás",
@@ -30,8 +30,7 @@ var timeoutID          = null;
 
 // HTML5audio object
 var html5audio = {
-    play: function(radio)
-    {
+    play: function(radio) {
         isPlaying = true;
 
         if (stream) {
@@ -160,8 +159,13 @@ var getName = function(station) {
                     document.querySelector("#status > img").src = "images/" + station +".png";
                 }
             }
-            if (metadata && metadata[0] && metadata[1])
+            if (metadata && metadata[0] && metadata[1]) {
+                if (metadata[0] === $("#artist").text() ||
+                    metadata[1] === $("#song").text())
+                    return;
                 marquee();
+            }
+                
         } else {
             if (station === "slovensko") {
                 var html = document.implementation.createHTMLDocument('');
@@ -183,6 +187,9 @@ var getName = function(station) {
                     if (artist && song) {
                         getCover(artist, song);
                         songMetadata = [artist, song];
+                        if (artist === $("#artist").text() ||
+                            song === $("#song").text())
+                            return;
                         marquee();
                     }
 
