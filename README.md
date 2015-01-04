@@ -1,4 +1,4 @@
-BB 10 Radio Stream APP - A simple Cascades app built for streaming online radios
+BB 10 Radio Stream App - A simple Cascades app built for streaming online radios
 ========
 
 ## How to Build
@@ -14,9 +14,9 @@ BB 10 Radio Stream APP - A simple Cascades app built for streaming online radios
 bar-descriptor.xml - Cascades project file.  Contains application parameters 
 and permissions.
 
-assets:
-    /css: css files for the application
-    /images: images and icons for the application.
-    /scripts: js files for the application
-    main.qml - Main QML structure file
-    simple.html - HTML5 WebView file determined for main.qml
+assets: <br />
+    /css: css files for the application <br />
+    /images: images and icons for the application <br />
+    /scripts: js files for the application <br />
+    main.qml - Main QML structure file <br />
+    simple.html - HTML5 WebView file determined for main.qml <br />
