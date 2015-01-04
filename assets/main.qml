@@ -26,12 +26,12 @@ NavigationPane {
                     id: myWebView
                     url: "local:///assets/simple.html"
                     settings.webInspectorEnabled: true
-                    
-                    function getTime(h,m,s) {
+
+                    function getTime(h, m, s) {
                         var h = h * 3600000;
                         var m = m * 60000;
                         var s = s * 1000;
-                        var time = h+m+s;
+                        var time = h + m + s;
                         myWebView.postMessage(parseInt(time));
                     }
                 }
@@ -74,20 +74,42 @@ NavigationPane {
 
     attachedObjects: [
         Page {
-            id: settingsPage            
-            
+            id: settingsPage
+            titleBar: TitleBar {
+                title: "Nastavenia"
+            }
+
             content: Container {
+                Label {
+                    text: "Ťuknutím na tlačidlo zmeníte tému"
+                    horizontalAlignment: HorizontalAlignment.Center
+                    margin.topOffset: 20
+                }
                 Button {
                     text: "Zmeň tému"
+                    horizontalAlignment: HorizontalAlignment.Center
 
                     // Checks the current theme and then flips the value
                     onClicked: {
                         if (Application.themeSupport.theme.colorTheme.style == VisualStyle.Bright) {
                             Application.themeSupport.setVisualStyle(VisualStyle.Dark);
-                        }
-                        else {
+                        } else {
                             Application.themeSupport.setVisualStyle(VisualStyle.Bright);
                         }
+                    }
+                }
+                Container {
+                    layout: StackLayout {
+                        orientation: LayoutOrientation.LeftToRight
+                    }
+                    Label {
+                        text: "Časovač pre vypnutie rádia"
+                        margin.topOffset: 8
+                        horizontalAlignment: HorizontalAlignment.Center
+                    }
+                    ToggleButton {
+                        id: togglebutton
+                        horizontalAlignment: HorizontalAlignment.Center
                     }
                 }
                 DateTimePicker {
@@ -96,7 +118,8 @@ NavigationPane {
                     mode: DateTimePickerMode.Timer
                     value: picker.dateFromTime("00:00:00")
                     onValueChanged: {
-                        myWebView.getTime(value.getHours(), value.getMinutes(), value.getSeconds());
+                        if (togglebutton.checked)
+                            myWebView.getTime(value.getHours(), value.getMinutes(), value.getSeconds());
                     }
                 }
             }

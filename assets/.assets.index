@@ -10,8 +10,10 @@ images/expres.png
 images/fm.png
 images/funradio.png
 images/icons/help.png
+images/icons/highvol.png
 images/icons/home.png
 images/icons/info.png
+images/icons/lowvol.png
 images/icons/settings.png
 images/icons/stop.png
 images/jemne.png
@@ -19,9 +21,7 @@ images/rock.png
 images/sity.png
 images/slovensko.png
 main.qml
-scripts/helper.js
 scripts/html5audio.js
 scripts/jquery.js
 scripts/marquee.js
-settingsPage.qml
 simple.html

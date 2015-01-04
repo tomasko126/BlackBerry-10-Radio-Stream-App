@@ -32,20 +32,21 @@ config_pri_assets {
         $$quote($$BASEDIR/assets/images/sity.png) \
         $$quote($$BASEDIR/assets/images/slovensko.png) \
         $$quote($$BASEDIR/assets/main.qml) \
-        $$quote($$BASEDIR/assets/scripts/helper.js) \
         $$quote($$BASEDIR/assets/scripts/html5audio.js) \
         $$quote($$BASEDIR/assets/scripts/jquery.js) \
         $$quote($$BASEDIR/assets/scripts/marquee.js) \
-        $$quote($$BASEDIR/assets/settingsPage.qml) \
         $$quote($$BASEDIR/assets/simple.html)
 }
 
 config_pri_source_group1 {
     SOURCES += \
+        $$quote($$BASEDIR/src/QmlBeam.cpp) \
         $$quote($$BASEDIR/src/applicationui.cpp) \
         $$quote($$BASEDIR/src/main.cpp)
 
-    HEADERS += $$quote($$BASEDIR/src/applicationui.hpp)
+    HEADERS += \
+        $$quote($$BASEDIR/src/QmlBeam.h) \
+        $$quote($$BASEDIR/src/applicationui.hpp)
 }
 
 INCLUDEPATH += $$quote($$BASEDIR/src)

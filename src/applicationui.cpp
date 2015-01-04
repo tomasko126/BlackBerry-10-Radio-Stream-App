@@ -1,5 +1,6 @@
 // Tabbed pane project template
 #include "applicationui.hpp"
+#include "QmlBeam.h"
 
 #include <bb/cascades/Application>
 #include <bb/cascades/QmlDocument>
@@ -33,4 +34,6 @@ ApplicationUI::ApplicationUI(bb::cascades::Application *app)
     // set created root object as a scene
     app->setScene(root);
 
+    // FOR DEBUGGING ONLY!
+    new QmlBeam(this);
 }
