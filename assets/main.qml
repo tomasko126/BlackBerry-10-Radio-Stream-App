@@ -1,4 +1,4 @@
-import bb.cascades 1.3
+import bb.cascades 1.4
 
 NavigationPane {
     id: navigationPane
@@ -64,12 +64,6 @@ NavigationPane {
                 }
             }
         ]
-
-        onCreationCompleted: {
-            // enable layout to adapt to the device rotation
-            // don't forget to enable screen rotation in bar-bescriptor.xml (Application->Orientation->Auto-orient)
-            OrientationSupport.supportedDisplayOrientation = SupportedDisplayOrientation.All;
-        }
     }
 
     attachedObjects: [
@@ -110,6 +104,13 @@ NavigationPane {
                     ToggleButton {
                         id: togglebutton
                         horizontalAlignment: HorizontalAlignment.Center
+                        onCheckedChanged: {
+                            if (togglebutton.checked) {
+                                picker.enabled = true;
+                            } else {
+                                picker.enabled = false;
+                            }
+                        }
                     }
                 }
                 DateTimePicker {
@@ -118,8 +119,7 @@ NavigationPane {
                     mode: DateTimePickerMode.Timer
                     value: picker.dateFromTime("00:00:00")
                     onValueChanged: {
-                        if (togglebutton.checked)
-                            myWebView.getTime(value.getHours(), value.getMinutes(), value.getSeconds());
+                        myWebView.getTime(value.getHours(), value.getMinutes(), value.getSeconds());
                     }
                 }
             }

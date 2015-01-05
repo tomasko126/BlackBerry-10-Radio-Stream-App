@@ -69,9 +69,8 @@
 
 
     <initialWindow>
-        <autoOrients>true</autoOrients>
+        <autoOrients>false</autoOrients>
         <systemChrome>none</systemChrome>
-        <transparent>true</transparent>
     </initialWindow>
 
     <!--  The icon for the application, which should be 86x86. -->

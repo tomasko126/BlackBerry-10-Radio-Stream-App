@@ -1,5 +1,5 @@
 // Begin animation
-$('#body').css("display","block").addClass('animated zoomIn');
+$('#body').css("display", "block").addClass('animated fadeIn');
 
 // If user clicks on station, begin to play it
 $(".radio").click(function() {
