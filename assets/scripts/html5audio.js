@@ -73,7 +73,7 @@ var html5audio = {
                         document.querySelector("#status > img").src = cover_url;
                     } else {
                         $('<img src="' + cover_url + '">').load(function() {
-                            $(this).insertBefore('#playing').addClass("radioimg animated fadeIn");
+                            $(this).addClass("radioimg animated fadeIn").insertBefore('#playing');
                         });
                     }
                     actualCoverUrl = cover_url;
@@ -81,7 +81,7 @@ var html5audio = {
                 } else if (!cover_url) {
                     if (!document.querySelector("#status > img")) {
                         $('<img src="images/' + station + '.png">').load(function() {
-                            $(this).insertBefore('#playing').addClass("radioimg animated fadeIn");
+                            $(this).addClass("radioimg animated fadeIn").insertBefore('#playing');
                         });
                     } else {
                         $("#status > img").addClass("animated fadeIn");
@@ -94,7 +94,7 @@ var html5audio = {
                 // An error has been thrown, add station image
                 if (!document.querySelector("#status > img")) {
                     $('<img src="images/' + station + '.png">').load(function() {
-                        $(this).insertBefore('#playing').addClass("radioimg animated fadeIn");
+                        $(this).addClass("radioimg animated fadeIn").insertBefore('#playing');
                     });
                 } else {
                     $("#status > img").addClass("animated fadeIn");
@@ -153,7 +153,7 @@ var html5audio = {
                     // If we don't know either name of artist or song, replace img with station img
                     if (!document.querySelector("#status > img")) {
                         $('<img src="images/' + station + '.png">').load(function() {
-                            $(this).insertBefore('#playing').addClass("radioimg animated fadeIn");
+                            $(this).addClass("radioimg animated fadeIn").insertBefore('#playing');
                         });
                     } else {
                         $("#status > img").addClass("animated fadeIn");
@@ -211,7 +211,7 @@ var html5audio = {
                 if (!actualCoverUrl) {
                     if (!document.querySelector("#status > img")) {
                         $('<img src="images/' + station + '.png">').load(function() {
-                            $(this).insertBefore('#playing').addClass("radioimg animated fadeIn");
+                            $(this).addClass("radioimg animated fadeIn").insertBefore('#playing');
                         });
                     } else {
                         $("#status > img").addClass("animated fadeIn");
