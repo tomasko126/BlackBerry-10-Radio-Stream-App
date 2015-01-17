@@ -83,7 +83,7 @@ var html5audio = {
 
         stream.addEventListener("ended", function() {
             html5audio.stop();
-            if (window.confirm('Streaming failed. Possibly due to a network error. Retry?')) {
+            if (window.confirm('Streaming failed, possibly due to a network error. Retry?')) {
                 html5audio.play(station);
             } // TODO: Handle else logic
         }, false);
@@ -151,23 +151,21 @@ var html5audio = {
         function reqListener () {
             // Handle SRO & Europa 2 specifically
             if (station !== "slovensko" && station !== "europa2") {
-                if (station === "funradio") {
-                    var artist = $(this.responseText).find("interpret")[0].textContent;
-                    var song = $(this.responseText).find("skladba")[0].textContent;
-                    songMetadata = [artist, song];
-                }
 
                 if (station === "expres") {
                     var json = JSON.parse(this.responseText);
                     songMetadata = [json.stream.artist, json.stream.song];
                 }
 
+                if (station === "funradio") {
+                    var artist = $(this.responseText).find("interpret")[0].textContent;
+                    var song = $(this.responseText).find("skladba")[0].textContent;
+                    songMetadata = [artist, song];
+                }
+
+                // Don't handle Jemné station (gives us data very rarely)
                 if (station === "jemne") {
-                    var html = document.implementation.createHTMLDocument('');
-                    html.documentElement.innerHTML = this.responseText;
-                    var text = html.getElementsByTagName("body")[0].innerText;
-                    var info = text.replace(/[0-9]/g, "").replace(/,/g,"").split("-");
-                    songMetadata = [info[0], info[1]];
+                    songMetadata = ["Rádio Jemné", "Pohodová muzika"];
                 }
 
                 if (songMetadata[0] && !songMetadata[1]) {
@@ -179,15 +177,10 @@ var html5audio = {
                 } else if (songMetadata[0] && songMetadata[1]) {
                     $("#artist").addClass('animated fadeIn').html(songMetadata[0]).text();
                     $("#song").addClass('animated fadeIn').html(songMetadata[1]).text();
-                } else {
-                    if (station === "jemne") {
-                        $("#artist").text("Rádio Jemné");
-                        $("#song").text("Pohodová muzika");
-                    }
                 }
 
                 // LAST.FM API for getting cover of song
-                if (songMetadata[0] && songMetadata[1]) {
+                if (station !== "jemne" && songMetadata[0] && songMetadata[1]) {
                     html5audio.getCover(songMetadata[0], songMetadata[1]);
                 } else {
                     // If we don't know either name of artist or song, replace img with station img
@@ -247,7 +240,7 @@ var html5audio = {
                     });
                 }
 
-                // A possible bug here?
+                // TODO: A possible bug here?
                 if (!actualCoverUrl) {
                     if (!document.querySelector("#status > img")) {
                         $('<img src="images/' + station + '.png">').load(function() {
