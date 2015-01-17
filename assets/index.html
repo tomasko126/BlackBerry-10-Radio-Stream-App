@@ -6,38 +6,7 @@
         <link rel="stylesheet" type="text/css" href="css/animate.css">
         <script type="text/javascript" src="scripts/jquery.js"></script>
         <script type="text/javascript" src="scripts/marquee.js"></script>
-        <script type="text/javascript">
-            navigator.cascades.onmessage = function onmessage(message) {
-               if (message === "scrollToCZ") {
-                   window.scrollTo(0,0);
-                   return;
-               }
-               if (message === "stop") {
-                   html5audio.stop();
-                   return;
-               }
-               if (message === "scrollToSK") {
-                   // (x,0)
-                   window.scrollTo(200,0);
-                   return;
-               }
-               // Timer
-               if (parseInt(message)) {
-                   console.log(timeoutID);
-                   if (timeoutID) {
-                       window.clearTimeout(timeoutID);
-                       timeoutID = window.setTimeout(function() {
-                           html5audio.stop()
-                       }, message);
-                   } else {
-                       timeoutID = window.setTimeout(function() {
-                           html5audio.stop();
-                           window.clearTimeout(timeoutID);
-                       }, message);
-                   }
-               }
-            }
-        </script>
+        <script type="text/javascript" src="scripts/stream.js"></script>
     </head>
     <body>
         <div id="status">
@@ -79,6 +48,6 @@
                 </div>
             </div>
         </div>
-        <script type="text/javascript" src="scripts/html5audio.js"></script>
+        <script type="text/javascript" src="scripts/stream.js"></script>
     </body>
 </html>

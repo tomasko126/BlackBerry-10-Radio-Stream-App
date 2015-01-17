@@ -14,26 +14,32 @@ NavigationPane {
             title: qsTr("Info")
             imageSource: "asset:///images/icons/info.png"
             onTriggered: {
-                app.showToast("České a slovenské online rádiá v jednej aplikácii určenej pre BlackBerry 10 \n Autor: Tomáš Taro\n Licencia: GPL v3");
+                app.showToast("České a slovenské online rádiá pre BB10 \n Autor: Tomáš Taro");
             }
         }
     }
 
     Page {
         Container {
-            ScrollView {
-                WebView {
-                    id: myWebView
-                    url: "local:///assets/simple.html"
-                    settings.webInspectorEnabled: true
-
-                    function getTime(h, m, s) {
-                        var h = h * 3600000;
-                        var m = m * 60000;
-                        var s = s * 1000;
-                        var time = h + m + s;
-                        myWebView.postMessage(parseInt(time));
+            WebView {
+                id: myWebView
+                url: "local:///assets/index.html"
+                navigation.defaultHighlightEnabled: false
+                settings.zoomToFitEnabled: true
+                settings.webInspectorEnabled: true
+                onMessageReceived: {
+                    if (message.data === "playing") {
+                        button.title = "Stop";
+                        button.imageSource = "asset:///images/icons/stop.png";
                     }
+                }
+
+                function getTime(h, m, s) {
+                    var h = h * 3600000;
+                    var m = m * 60000;
+                    var s = s * 1000;
+                    var time = h + m + s;
+                    myWebView.postMessage(parseInt(time));
                 }
             }
         }
@@ -45,14 +51,24 @@ NavigationPane {
                 imageSource: "asset:///images/icons/info.png"
                 onTriggered: {
                     myWebView.postMessage("scrollToCZ");
+                    console.log("czradio");
                 }
             },
             ActionItem {
-                title: "Stop"
+                id: button
+                title: "Play"
                 ActionBar.placement: ActionBarPlacement.Signature
-                imageSource: "asset:///images/icons/stop.png"
+                imageSource: "asset:///images/icons/play.png"
                 onTriggered: {
-                    myWebView.postMessage("stop");
+                    if (button.title === "Play") {
+                        myWebView.postMessage("play");
+                        button.title = "Stop";
+                        button.imageSource = "asset:///images/icons/stop.png";
+                    } else {
+                        myWebView.postMessage("stop");
+                        button.title = "Play";
+                        button.imageSource = "asset:///images/icons/play.png";
+                    }
                 }
             },
             ActionItem {

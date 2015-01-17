@@ -25,17 +25,18 @@ config_pri_assets {
         $$quote($$BASEDIR/assets/images/icons/help.png) \
         $$quote($$BASEDIR/assets/images/icons/home.png) \
         $$quote($$BASEDIR/assets/images/icons/info.png) \
+        $$quote($$BASEDIR/assets/images/icons/play.png) \
         $$quote($$BASEDIR/assets/images/icons/settings.png) \
         $$quote($$BASEDIR/assets/images/icons/stop.png) \
         $$quote($$BASEDIR/assets/images/jemne.png) \
         $$quote($$BASEDIR/assets/images/rock.png) \
         $$quote($$BASEDIR/assets/images/sity.png) \
         $$quote($$BASEDIR/assets/images/slovensko.png) \
+        $$quote($$BASEDIR/assets/index.html) \
         $$quote($$BASEDIR/assets/main.qml) \
-        $$quote($$BASEDIR/assets/scripts/html5audio.js) \
         $$quote($$BASEDIR/assets/scripts/jquery.js) \
         $$quote($$BASEDIR/assets/scripts/marquee.js) \
-        $$quote($$BASEDIR/assets/simple.html)
+        $$quote($$BASEDIR/assets/scripts/stream.js)
 }
 
 config_pri_source_group1 {

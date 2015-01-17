@@ -15,6 +15,46 @@ var stream             = null;         // Object   - HTML5 Audio object
 var station            = null;         // String   - name of playing radio stream
 var timeoutID          = null;
 
+// Onmessage listener
+navigator.cascades.onmessage = function onmessage(message) {
+    if (message === "scrollToCZ") {
+        window.scrollTo(0,0);
+        return;
+    }
+    if (message === "play") {
+        if (station) {
+            html5audio.play(station);
+        } else {
+            html5audio.play("expres");
+        }
+        return;
+    }
+    if (message === "stop") {
+        html5audio.stop();
+        return;
+    }
+    if (message === "scrollToSK") {
+        // (x,0)
+        window.scrollTo(200,0);
+        return;
+    }
+    // Timer
+    if (parseInt(message)) {
+        console.log(timeoutID);
+        if (timeoutID) {
+            window.clearTimeout(timeoutID);
+            timeoutID = window.setTimeout(function() {
+                html5audio.stop()
+            }, message);
+        } else {
+            timeoutID = window.setTimeout(function() {
+                html5audio.stop();
+                window.clearTimeout(timeoutID);
+            }, message);
+        }
+    }
+}
+
 // Player object
 var html5audio = {
     play: function(radio) {
@@ -45,7 +85,7 @@ var html5audio = {
             html5audio.stop();
             if (window.confirm('Streaming failed. Possibly due to a network error. Retry?')) {
                 html5audio.play(station);
-            }
+            } // TODO: Handle else logic
         }, false);
     },
     getCover: function(artist, track) {
@@ -53,7 +93,7 @@ var html5audio = {
             type: "POST",
             url: "http://ws.audioscrobbler.com/2.0/?",
             data: { method: "track.getInfo", api_key: "cdfa596938a9f8083739ee5ee08e7e29",
-                    artist: artist, track: track },
+                   artist: artist, track: track },
             success: function(response) {
                 var a = response.querySelectorAll("image");
                 var b = a.length;
@@ -77,7 +117,7 @@ var html5audio = {
                         });
                     }
                     actualCoverUrl = cover_url;
-                // We didn't get URL of cover in response -> add default station omage
+                    // We didn't get URL of cover in response -> add default station omage
                 } else if (!cover_url) {
                     if (!document.querySelector("#status > img")) {
                         $('<img src="images/' + station + '.png">').load(function() {
@@ -177,9 +217,9 @@ var html5audio = {
                         var text = html.querySelector(".ro-slovensko > .playRadio > .overflow").textContent;
                         return text.replace(/-/,"").replace(" ","");
                     });
-                    
+
                     // TODO: Marquee
-                    
+
                 } else {
                     // TODO: The same for Evropa 2, Frekvence 1 -- just replace 'okey' in GET
                     $.get("http://rds.lagardere.cz/getRadio.php?station=okey", function(data) {
@@ -254,10 +294,12 @@ var html5audio = {
         // Set up new Audio object
         stream = new Audio(this.getUrl(radio));
         stream.play();
-        
+
         // Save name of currently playing radio
         station = radio;
-        
+
+        // Send message that stations is playing
+        navigator.cascades.postMessage("playing");
         // Get name of artist and track
         this.getName(radio);
 
@@ -279,7 +321,8 @@ var html5audio = {
 
 function marquee() {
     setTimeout(function() {
-        // TODO: Make a better logic...maybe get resolution?
+        // TODO: Make a better logic...maybe get a resolution?
+        // BUG: Laggy, doesn't work on funradio station
         if (songMetadata[0].length > 20)
             $("#artist").marquee();
 

@@ -1,5 +1,5 @@
 1
-23
+24
 css/animate.css
 css/index.css
 images/aligator.png
@@ -12,14 +12,15 @@ images/funradio.png
 images/icons/help.png
 images/icons/home.png
 images/icons/info.png
+images/icons/play.png
 images/icons/settings.png
 images/icons/stop.png
 images/jemne.png
 images/rock.png
 images/sity.png
 images/slovensko.png
+index.html
 main.qml
-scripts/html5audio.js
 scripts/jquery.js
 scripts/marquee.js
-simple.html
+scripts/stream.js
