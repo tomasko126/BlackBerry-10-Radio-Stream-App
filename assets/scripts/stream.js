@@ -73,12 +73,12 @@ var html5audio = {
         // Event listeners
         stream.addEventListener("waiting", function() {
             isPlaying = false;
-            //document.getElementById('activityindicator').style.display = 'block';
+            document.getElementById('activityindicator').style.display = 'inline';
         }, false);
 
         stream.addEventListener("playing", function() {
             isPlaying = true;
-            //document.getElementById('activityindicator').style.display = 'none';
+            document.getElementById('activityindicator').style.display = 'none';
         }, false);
 
         stream.addEventListener("ended", function() {
@@ -303,8 +303,7 @@ var html5audio = {
     },
     stop: function() {
         stream.pause();
-        // TODO: Implement activity indicator
-        //document.getElementById('activityindicator').style.display = 'none';
+        document.getElementById('activityindicator').style.display = 'none';
         clearInterval(getMetadata);
         stream = null;
         isPlaying = false;

@@ -26,11 +26,17 @@ table {
     white-space: nowrap;
 }
 #playing {
-    display: inline-block;
+    display: inline;
     margin-left: 18px;
     font-weight: 300;
     position: absolute;
+    max-width: 400px;
+    max-height: 400px;
 }
+#activityindicator {
+    display: none;
+}
+
 #radios {
     max-height: 100px;
     position: relative;
