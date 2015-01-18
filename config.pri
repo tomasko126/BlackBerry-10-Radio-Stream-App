@@ -27,6 +27,7 @@ config_pri_assets {
         $$quote($$BASEDIR/assets/images/icons/info.png) \
         $$quote($$BASEDIR/assets/images/icons/play.png) \
         $$quote($$BASEDIR/assets/images/icons/settings.png) \
+        $$quote($$BASEDIR/assets/images/icons/speaker.png) \
         $$quote($$BASEDIR/assets/images/icons/spinner.gif) \
         $$quote($$BASEDIR/assets/images/icons/stop.png) \
         $$quote($$BASEDIR/assets/images/jemne.png) \

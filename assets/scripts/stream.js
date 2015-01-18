@@ -288,11 +288,16 @@ var html5audio = {
         stream = new Audio(this.getUrl(radio));
         stream.play();
 
+
         // Save name of currently playing radio
         station = radio;
 
         // Send message that stations is playing
         navigator.cascades.postMessage("playing");
+
+        // Show speaker icon to determine, which station is playing
+        document.querySelector("#"+radio+" > .playing_icon").style.display = "block";
+
         // Get name of artist and track
         this.getName(radio);
 
@@ -303,6 +308,7 @@ var html5audio = {
     },
     stop: function() {
         stream.pause();
+        document.querySelector("#"+station+" > .playing_icon").style.display = "none";
         document.getElementById('activityindicator').style.display = 'none';
         clearInterval(getMetadata);
         stream = null;
@@ -314,7 +320,7 @@ var html5audio = {
 function marquee() {
     setTimeout(function() {
         // TODO: Make a better logic...maybe get a resolution?
-        // BUG: Laggy, doesn't work on funradio station
+        // BUG: Laggy, doesn't work on funradio station & europa2
         if (songMetadata[0].length > 20)
             $("#artist").marquee();
 
