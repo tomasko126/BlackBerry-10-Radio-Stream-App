@@ -1,4 +1,5 @@
 import bb.cascades 1.4
+import bb.multimedia 1.4
 
 NavigationPane {
     id: navigationPane
@@ -22,16 +23,44 @@ NavigationPane {
     Page {
         Container {
             WebView {
-                id: myWebView
+                id: webView
                 url: "local:///assets/index.html"
                 navigation.defaultHighlightEnabled: false
                 settings.zoomToFitEnabled: true
                 settings.webInspectorEnabled: true
                 onMessageReceived: {
-                    if (message.data === "playing") {
-                        button.title = "Stop";
-                        button.imageSource = "asset:///images/icons/stop.png";
+                    switch (message.data) {
+                        case "expres":    player.setSourceUrl("http://85.248.7.162:8000/96.mp3")
+                                          player.play()
+                                          button.title = "Stop"
+                                          button.imageSource = "asset:///images/icons/stop.png"
+                                          break;
+                        case "slovensko": player.setSourceUrl("http://live.slovakradio.sk:8000/Slovensko_128.mp3");
+                                          player.play();
+                                          button.title = "Stop";
+                                          button.imageSource = "asset:///images/icons/stop.png";
+                                          break;
+                        case "funradio":  player.setSourceUrl("http://stream.funradio.sk:8000/fun128.mp3");
+                                          player.play();
+                                          button.title = "Stop";
+                                          button.imageSource = "asset:///images/icons/stop.png";
+                                          break;
+                        case "europa2":   player.setSourceUrl("http://ice2.europa2.sk/fm-europa2sk-128");
+                                          player.play();
+                                          button.title = "Stop";
+                                          button.imageSource = "asset:///images/icons/stop.png";
+                                          break;
+                        case "jemne":     player.setSourceUrl("http://93.184.69.143:8000/;jemnemelodie-high-mp3.mp3");
+                                          player.play();
+                                          button.title = "Stop";
+                                          button.imageSource = "asset:///images/icons/stop.png";
+                                          break;
+                        case "stop":      player.reset();
+                                          button.title = "Play";
+                                          button.imageSource = "asset:///images/icons/play.png";
+                                          break;
                     }
+                    console.log(player.sourceUrl)
                 }
 
                 function getTime(h, m, s) {
@@ -39,7 +68,7 @@ NavigationPane {
                     var m = m * 60000;
                     var s = s * 1000;
                     var time = h + m + s;
-                    myWebView.postMessage(parseInt(time));
+                    webView.postMessage(parseInt(time));
                 }
             }
         }
@@ -50,7 +79,7 @@ NavigationPane {
                 ActionBar.placement: ActionBarPlacement.OnBar
                 imageSource: "asset:///images/icons/info.png"
                 onTriggered: {
-                    myWebView.postMessage("scrollToCZ");
+                    webView.postMessage("scrollToCZ");
                     console.log("czradio");
                 }
             },
@@ -61,11 +90,14 @@ NavigationPane {
                 imageSource: "asset:///images/icons/play.png"
                 onTriggered: {
                     if (button.title === "Play") {
-                        myWebView.postMessage("play");
+                        webView.postMessage("play");
+                        player.setSourceUrl("http://85.248.7.162:8000/96.mp3");
+                        player.play();
                         button.title = "Stop";
                         button.imageSource = "asset:///images/icons/stop.png";
                     } else {
-                        myWebView.postMessage("stop");
+                        webView.postMessage("stop");
+                        player.reset();
                         button.title = "Play";
                         button.imageSource = "asset:///images/icons/play.png";
                     }
@@ -76,13 +108,26 @@ NavigationPane {
                 ActionBar.placement: ActionBarPlacement.OnBar
                 imageSource: "asset:///images/icons/info.png"
                 onTriggered: {
-                    myWebView.postMessage("scrollToSK");
+                    webView.postMessage("scrollToSK");
                 }
             }
         ]
     }
 
     attachedObjects: [
+        MediaPlayer {
+            id: player
+            onError: {
+                webView.postMessage("error");
+            }
+            onBufferStatusChanged: {
+                if (bufferStatus === 1 || bufferStatus === 0) {
+                    webView.postMessage("showLoading");
+                } else {
+                    webView.postMessage("hideLoading");
+                }
+            }
+        },
         Page {
             id: settingsPage
             titleBar: TitleBar {
@@ -135,7 +180,7 @@ NavigationPane {
                     mode: DateTimePickerMode.Timer
                     value: picker.dateFromTime("00:00:00")
                     onValueChanged: {
-                        myWebView.getTime(value.getHours(), value.getMinutes(), value.getSeconds());
+                        webView.getTime(value.getHours(), value.getMinutes(), value.getSeconds());
                     }
                 }
             }

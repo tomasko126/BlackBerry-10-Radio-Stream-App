@@ -11,26 +11,42 @@ var actualCoverUrl     = null;         // String   - URL of cover
 var getMetadata        = null;         // Function - setInterval() fn, which calls getName(radio) for updating name of song
 var isPlaying          = false;        // Bool     - If stream is playing, it's given value is true
 var songMetadata       = null;         // Array    - Contains name of artist and name of song
-var stream             = null;         // Object   - HTML5 Audio object
 var station            = null;         // String   - name of playing radio stream
 var timeoutID          = null;
 
-// Onmessage listener
+// Message from Cascade
 navigator.cascades.onmessage = function onmessage(message) {
-    if (message === "scrollToCZ") {
-        window.scrollTo(0,0);
-        return;
+    // If play button has been pressed
+    if (message === "error") {
+        html5audio.stop();
+        if (window.confirm('Streaming failed, possibly due to a network error. Retry?')) {
+            html5audio.play(station);
+        }
     }
     if (message === "play") {
         if (station) {
             html5audio.play(station);
         } else {
+            // TODO: display a popup, what station to play?
             html5audio.play("expres");
         }
         return;
     }
+    // If stop button has been pressed
     if (message === "stop") {
         html5audio.stop();
+        return;
+    }
+    if (message === "showLoading") {
+        isPlaying = false;
+        document.getElementById('activityindicator').style.display = 'inline';
+    }
+    if (message === "hideLoading") {
+        isPlaying = true;
+        document.getElementById('activityindicator').style.display = 'none';
+    }
+    if (message === "scrollToCZ") {
+        window.scrollTo(0,0);
         return;
     }
     if (message === "scrollToSK") {
@@ -61,7 +77,7 @@ var html5audio = {
         isPlaying = true;
 
         // If stream is playing, stop it first
-        if (stream) {
+        if (station) {
             $("#artist").removeClass('animated fadeIn');
             $("#song").removeClass('animated fadeIn');
             this.stop();
@@ -69,24 +85,6 @@ var html5audio = {
 
         // Get url of chosen radio station and begin to load it
         this.init(radio);
-
-        // Event listeners
-        stream.addEventListener("waiting", function() {
-            isPlaying = false;
-            document.getElementById('activityindicator').style.display = 'inline';
-        }, false);
-
-        stream.addEventListener("playing", function() {
-            isPlaying = true;
-            document.getElementById('activityindicator').style.display = 'none';
-        }, false);
-
-        stream.addEventListener("ended", function() {
-            html5audio.stop();
-            if (window.confirm('Streaming failed, possibly due to a network error. Retry?')) {
-                html5audio.play(station);
-            } // TODO: Handle else logic
-        }, false);
     },
     getCover: function(artist, track) {
         $.ajax({
@@ -216,6 +214,7 @@ var html5audio = {
                 } else {
                     // TODO: The same for Evropa 2, Frekvence 1 -- just replace 'okey' in GET
                     $.get("http://rds.lagardere.cz/getRadio.php?station=okey", function(data) {
+                        console.log(data);
                         var artist = data.querySelector("songArtist").textContent.
                         replace(/^\s*\/\/<!\[CDATA\[([\s\S]*)\/\/\]\]>\s*\z/,"");
                         var song = data.querySelector("songTitle").textContent.
@@ -262,38 +261,12 @@ var html5audio = {
             xhr.send();
         }
     },
-    getUrl: function(radio) {
-        var streamUrl = null;
-        switch (radio) {
-            case "expres":
-                streamUrl = "http://85.248.7.162:8000/96.mp3";
-                break;
-            case "slovensko":
-                streamUrl = "http://live.slovakradio.sk:8000/Slovensko_128.mp3";
-                break;
-            case "funradio":
-                streamUrl = "http://stream.funradio.sk:8000/fun128.mp3";
-                break;
-            case "europa2":
-                streamUrl = "http://ice2.europa2.sk/fm-europa2sk-128";
-                break;
-            case "jemne":
-                streamUrl = "http://93.184.69.143:8000/;jemnemelodie-high-mp3.mp3";
-                break;
-        }
-        return streamUrl;
-    },
     init: function(radio) {
-        // Set up new Audio object
-        stream = new Audio(this.getUrl(radio));
-        stream.play();
-
-
         // Save name of currently playing radio
         station = radio;
 
-        // Send message that stations is playing
-        navigator.cascades.postMessage("playing");
+        // Send message to Cascades, which sation is currently playing
+        navigator.cascades.postMessage(radio);
 
         // Show speaker icon to determine, which station is playing
         document.querySelector("#"+radio+" > .playing_icon").style.display = "block";
@@ -307,13 +280,12 @@ var html5audio = {
         }, 15000);
     },
     stop: function() {
-        stream.pause();
         document.querySelector("#"+station+" > .playing_icon").style.display = "none";
         document.getElementById('activityindicator').style.display = 'none';
         clearInterval(getMetadata);
-        stream = null;
         isPlaying = false;
         actualCoverUrl = null;
+        navigator.cascades.postMessage("stop");
     }
 };
 
