@@ -19,4 +19,4 @@ assets: <br />
     /images: images and icons for the application <br />
     /scripts: js files for the application <br />
     main.qml - Main QML structure file <br />
-    simple.html - HTML5 WebView file determined for main.qml <br />
+    index.html - HTML5 WebView file determined for main.qml <br />
