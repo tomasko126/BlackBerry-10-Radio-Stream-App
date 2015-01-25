@@ -15,6 +15,7 @@ config_pri_assets {
     OTHER_FILES += \
         $$quote($$BASEDIR/assets/css/animate.css) \
         $$quote($$BASEDIR/assets/css/index.css) \
+        $$quote($$BASEDIR/assets/data.xml) \
         $$quote($$BASEDIR/assets/images/aligator.png) \
         $$quote($$BASEDIR/assets/images/antena.png) \
         $$quote($$BASEDIR/assets/images/devin.png) \

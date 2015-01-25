@@ -1,70 +1,55 @@
-// Begin animation
-$('#body').css("display", "block").addClass('animated fadeIn');
-
-// If user clicks on station, begin to play it
-$(".radio").click(function() {
-    html5audio.play(this.id);
-});
-
 // Init variables
 var actualCoverUrl     = null;         // String   - URL of cover
 var getMetadata        = null;         // Function - setInterval() fn, which calls getName(radio) for updating name of song
-var isPlaying          = false;        // Bool     - If stream is playing, it's given value is true
 var songMetadata       = null;         // Array    - Contains name of artist and name of song
 var station            = null;         // String   - name of playing radio stream
 var timeoutID          = null;
 
 // Message from Cascade
 navigator.cascades.onmessage = function onmessage(message) {
-    // If play button has been pressed
-    if (message === "error") {
-        html5audio.stop();
-        if (window.confirm('Streaming failed, possibly due to a network error. Retry?')) {
-            html5audio.play(station);
-        }
+    if (message === "expres" || message === "funradio" || message === "slovensko" ||
+        message === "europa2" || message === "jemne") {
+        stream.play(message);
+        return;
     }
+    // If play button has been pressed
     if (message === "play") {
         if (station) {
-            html5audio.play(station);
+            stream.play(station);
         } else {
             // TODO: display a popup, what station to play?
-            html5audio.play("expres");
+            stream.play("expres");
         }
         return;
     }
     // If stop button has been pressed
     if (message === "stop") {
-        html5audio.stop();
+        stream.stop();
         return;
     }
+    // When station couldn't be fetched
+    if (message === "error") {
+        stream.stop();
+        if (window.confirm('Streaming failed, possibly due to a network error. Retry?')) {
+            stream.play(station);
+        }
+    }
     if (message === "showLoading") {
-        isPlaying = false;
         document.getElementById('activityindicator').style.display = 'inline';
     }
     if (message === "hideLoading") {
-        isPlaying = true;
         document.getElementById('activityindicator').style.display = 'none';
-    }
-    if (message === "scrollToCZ") {
-        window.scrollTo(0,0);
-        return;
-    }
-    if (message === "scrollToSK") {
-        // (x,0)
-        window.scrollTo(200,0);
-        return;
     }
     // Timer
     if (parseInt(message)) {
-        console.log(timeoutID);
         if (timeoutID) {
             window.clearTimeout(timeoutID);
             timeoutID = window.setTimeout(function() {
-                html5audio.stop()
+                stream.stop();
             }, message);
         } else {
             timeoutID = window.setTimeout(function() {
-                html5audio.stop();
+                stream.stop();
                 window.clearTimeout(timeoutID);
             }, message);
         }
@@ -72,10 +57,8 @@ navigator.cascades.onmessage = function onmessage(message) {
 }
 
 // Player object
-var html5audio = {
+var stream = {
     play: function(radio) {
-        isPlaying = true;
-
         // If stream is playing, stop it first
         if (station) {
             $("#artist").removeClass('animated fadeIn');
@@ -179,7 +162,7 @@ var html5audio = {
 
                 // LAST.FM API for getting cover of song
                 if (station !== "jemne" && songMetadata[0] && songMetadata[1]) {
-                    html5audio.getCover(songMetadata[0], songMetadata[1]);
+                    stream.getCover(songMetadata[0], songMetadata[1]);
                 } else {
                     // If we don't know either name of artist or song, replace img with station img
                     if (!document.querySelector("#status > img")) {
@@ -214,20 +197,10 @@ var html5audio = {
                 } else {
                     // TODO: The same for Evropa 2, Frekvence 1 -- just replace 'okey' in GET
                     $.get("http://rds.lagardere.cz/getRadio.php?station=okey", function(data) {
-                        console.log(data);
                         var artist = data.querySelector("songArtist").textContent.
                         replace(/^\s*\/\/<!\[CDATA\[([\s\S]*)\/\/\]\]>\s*\z/,"");
                         var song = data.querySelector("songTitle").textContent.
                         replace(/^\s*\/\/<!\[CDATA\[([\s\S]*)\/\/\]\]>\s*\z/,"");
-
-                        if (artist && song) {
-                            html5audio.getCover(artist, song);
-                            songMetadata = [artist, song];
-                            if (artist === $("#artist").text() ||
-                                song === $("#song").text())
-                                return;
-                            marquee();
-                        }
 
                         $("#artist").addClass('animated fadeIn').text(function() {
                             return artist;
@@ -236,6 +209,15 @@ var html5audio = {
                         $("#song").addClass('animated fadeIn').text(function() {
                             return song;
                         });
+
+                        if (artist && song) {
+                            stream.getCover(artist, song);
+                            songMetadata = [artist, song];
+                            if (artist === $("#artist").text() ||
+                                song === $("#song").text())
+                                return;
+                            marquee();
+                        }
                     });
                 }
 
@@ -265,38 +247,41 @@ var html5audio = {
         // Save name of currently playing radio
         station = radio;
 
-        // Send message to Cascades, which sation is currently playing
-        navigator.cascades.postMessage(radio);
-
-        // Show speaker icon to determine, which station is playing
-        document.querySelector("#"+radio+" > .playing_icon").style.display = "block";
-
         // Get name of artist and track
         this.getName(radio);
 
         // Get name of artist and track each 15 seconds
         getMetadata = setInterval(function() {
-            html5audio.getName(radio);
+            stream.getName(radio);
         }, 15000);
     },
     stop: function() {
-        document.querySelector("#"+station+" > .playing_icon").style.display = "none";
         document.getElementById('activityindicator').style.display = 'none';
         clearInterval(getMetadata);
-        isPlaying = false;
         actualCoverUrl = null;
-        navigator.cascades.postMessage("stop");
     }
 };
 
 function marquee() {
     setTimeout(function() {
         // TODO: Make a better logic...maybe get a resolution?
-        // BUG: Laggy, doesn't work on funradio station & europa2
+        // BUG: Doesn't work on funradio station & europa2
         if (songMetadata[0].length > 20)
-            $("#artist").marquee();
+            $("#artist").marquee({
+                duration: 5000,
+                gap: 250,
+                delayBeforeStart: 0,
+                direction: 'left',
+                duplicated: true
+            });
 
         if (songMetadata[1].length > 20)
-            $("#song").marquee();
-    }, 50);
+            $("#song").marquee({
+                duration: 5000,
+                gap: 250,
+                delayBeforeStart: 0,
+                direction: 'left',
+                duplicated: true
+            });
+    }, 500);
 }

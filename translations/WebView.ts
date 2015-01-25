@@ -4,11 +4,11 @@
 <context>
     <name>main</name>
     <message>
-        <source>Info</source>
+        <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Settings</source>
+        <source>Info</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

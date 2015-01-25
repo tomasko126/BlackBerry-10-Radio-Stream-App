@@ -1,0 +1,12 @@
+<root>
+    <header title="Slovenské rádiá">
+        <station title="Rádio Expres" id="expres" description="Baví nás baviť vás" image="asset:///images/expres.png" />
+        <station title="FUN Rádio" id="funradio" description="European Hit Radio" image="asset:///images/funradio.png" />
+        <station title="Rádio Slovensko" id="slovensko" description="Najpočúvanejší okruh RTVS" image="asset:///images/slovensko.png" />
+        <station title="Europa 2" id="europa2" description="MaXXimum muziky" image="asset:///images/europa2.png" />
+        <station title="Rádio Jemné" id="jemne" description="Jemná muzika" image="asset:///images/jemne.png" />
+    </header>
+    <header title="České rádiá">
+        <station title="Station" description="Station description" image="" />
+    </header>
+</root>
